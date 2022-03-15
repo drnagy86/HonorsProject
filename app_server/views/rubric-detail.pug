@@ -1,0 +1,64 @@
+extends layout
+
+block content
+    .row
+        .col-12.col-md-8.mt-5.mx-auto
+            h2= rubric.name
+    .row
+        .col-12.col-md-8.mx-auto.my-1
+            .error= message
+            .bg-light.m-2.p-3
+                .row.clearfix
+                    .clearfix.col-2
+                        .float-end
+                            label Rubric Name:
+                    .clearfix.col
+                        .float-start
+                            p= rubric.name
+                .row
+                    .col-2.clearfix
+                        .float-end
+                            label Description:
+                    .col.clearfix
+                        .float-start
+                            p= rubric.description
+                .row
+                    .col-2.clearfix
+                        .float-end
+                            label Created On:
+                    .col.clearfix
+                        .float-start
+                            p= rubric.dateCreated
+
+                .row
+                    .col-2.clearfix
+                        .float-end
+                            label Last Updated:
+                    .col.clearfix
+                        .float-start
+                            p= rubric.dateUpdated
+                .row
+                    .col-2.clearfix
+                        .float-end
+                            label Creator:
+                    .col.clearfix
+                        .float-start
+                            p= rubric.rubricCreator
+                .row
+                    .col-2.clearfix
+                        .float-end
+                            label Subjects:
+                    .col.clearfix
+                        each subject in rubric.subjects ? rubric.subjects : []
+                            button.btn-dark= subject.subject_id
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+
+<div class="row">
+  <div class="col-12 col-md-8 mt-5mx-auto">
+    <h2>Latest Rubrics Added</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col my-1">
+    <div class="error"></div>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Rubric Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Last Update</th>
+        <th scope="col">Subjects</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let rubric of rubrics">
+        <td><a href="/rubric/{{rubric._id}}">{{rubric.name}}</a> </td>
+        <td>{{rubric.description}}</td>
+        <td>{{rubric.dateUpdated | date}}</td>
+        <td><span class="badge bg-primary m-1" *ngFor="let subject of rubric.subjects">{{subject}}</span></td>
+      </tr>
+      </tbody>
+    </table>
+    <div>
+
+    </div>
+  </div>
+</div>
+

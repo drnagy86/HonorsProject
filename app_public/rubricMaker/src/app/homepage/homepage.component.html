@@ -1,0 +1,14 @@
+<app-page-header [content]="pageContent.header"></app-page-header>
+
+<div class="row mt-5">
+  <div class="col-12 col-md-8 ">
+    <div class="error"></div>
+    <app-home-list>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
+      </div>
+    </app-home-list>
+  </div>
+  <app-sidebar class="col-12 col-md-4" [content]="pageContent.sidebar"></app-sidebar>
+</div>
+

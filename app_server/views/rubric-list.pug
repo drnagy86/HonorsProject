@@ -1,0 +1,32 @@
+extends layout
+
+block content
+    .mt-4.p-5.bg-primary.text-white.rounded-1
+        h1= pageHeader.title
+        p.mt-3 #{pageHeader.strapLine}
+    // use angular
+    .error= message
+    app-home-list
+    //.row
+    //    .col-12.col-md-8.mt-5.mx-auto
+    //        h2 Latest Rubrics Added
+    //.row
+    //    .col-12.col-md-8.mx-auto.my-1
+    //        .error= message
+    //        table.table
+    //            thead
+    //                tr
+    //                    th(scope="col") Rubric Name
+    //                    th(scope="col") Description
+    //            tbody
+    //                each rubric in rubrics ? rubrics : []
+    //                    tr
+    //                        td
+    //                            a(href=`/rubric/${rubric._id}`)= rubric.name
+    //                        td= rubric.description
+
+block scripts
+    script(src='/rubricMaker/build/main.168ca8b1ff637cd8.js')
+    script(src='/rubricMaker/build/polyfills.e11b5be817eddcf9.js')
+    script(src='/rubricMaker/build/runtime.1a140a829aa95d29.js')
+
