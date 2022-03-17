@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Rub = mongoose.model('Rubric');
-
+const User = mongoose.model('User');
 // With your basic controller, you need to trap three errors:
 //     The request parameters don’t include locationid.
 //     The findById() method doesn’t return a location.
@@ -28,53 +28,40 @@ const rubricsList = (req,res) => {
         })
 };
 const rubricCreate = (req,res) => {
-    Rub
-        .create({
-            "name" : req.body.name,
-            "description": req.body.description,
-            "rubricCreator" : req.body.rubric_creator,
-            // another call maybe? or subject is an array and for each subject in array?
-            // subjects : [
-            //     res.body.subjects.forEach( s => {
-            //         subject_id : s
-            //     })
-            // ]
-            //
-            // "subjects" : [{
-            //     "subject_id" : req.body.subject_id
-            // }]
+
+    //res = getRubricCreator(req, res);
+    //console.log(res);
+    if (res.status === '404'){
+        return res;
+    } else if (!req.body.name || !req.body.description){
+        return res
+            .status(400)
+            .json({
+                "message" : "Missing name or description"
+            });
+    } else {
+
+        Rub
+            .create({
+                    "name" : req.body.name,
+                    "description": req.body.description,
+                    // "rubricCreator" : req.payload.email,
+                    "rubricCreator" : req.body.rubricCreator,
+                }
+                , (err, rubric) => {
+                    if (err){
+                        console.log(rubric);
+                        return res
+                            .status(400)
+                            .json(err)
+                    } else {
+                        return res
+                            .status(201)
+                            .json(rubric);
+                    }
+                });
     }
-    , (err, rubric) => {
-        if (err){
-            // return res
-                // .status(400)
-                // .json(
-                //     {
-                //         "name" : req.body.name,
-                //         "description": req.body.description,
-                //         "rubricCreator" : req.body.rubric_creator,
-                //         // another call maybe? or subject is an array and for each subject in array?
-                //         // subjects : [
-                //         //     res.body.subjects.forEach( s => {
-                //         //         subject_id : s
-                //         //     })
-                //         // ]
-                //         //
-                //         // "subjects" : [{
-                //         //     subject_id : req.body.subject_id
-                //         // }]
-                //     }
-                // )
-            return res
-                .status(400)
-                .json(err)
-        } else {
-            //return res.status(200).json({"message": "hey"})
-            return res
-                .status(201)
-                .json(rubric);
-        }
-    });
+
 };
 const rubricReadOne = (req,res) => {
     Rub
@@ -172,6 +159,35 @@ const rubricDeleteOne  = (req,res) => {
             });
     }
 };
+
+
+
+const getRubricCreator = (req, res) => {
+    if (req.payload && req.payload.email) {
+        User
+            .findOne({ email : req.payload.email })
+            .exec((err, user) => {
+                if (!user) {
+                    return res
+                        .status(404)
+                        .json({"message": "User not found"});
+                } else if (err) {
+                    return res
+                        .status(404)
+                        .json(err);
+                } else {
+                    return res
+                        .status(200)
+                        .json(user)
+                }
+            });
+    } else {
+        return res
+            .status(404)
+            .json({"message": "User not found"});
+    }
+};
+
 
 
 module.exports = {

@@ -171,7 +171,7 @@ const subjectDeleteOne = (req, res) => {
             .status(404)
             .json({'message': 'Not found, rubricid and subjectid are both required'});
             }
-        Loc
+        Rub
             .findById(rubricid)
             .select('subjects')
             .exec((err, rubric) => {
@@ -251,7 +251,6 @@ const subjectCreate = (req, res) => {
 };
 
 const doAddSubject = (req, res, rubric) => {
-
   if (!rubric){
       res
           .status(404)

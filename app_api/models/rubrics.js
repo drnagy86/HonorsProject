@@ -1,80 +1,82 @@
 const mongoose = require('mongoose');
 
-// const criteriaSchema = new mongoose.Schema({
-//     criteria_id : {
-//         type : String,
-//         required : true,
-//         unique : true
-//     },
-//     content : {
-//         type : String,
-//         required : true
-//     },
-//     score : {
-//         type : Number,
-//         required : true,
-//         min : 0,
-//         max : 9
-//     },
-//     dateCreated : {
-//         type : Date,
-//         required : true,
-//         'default' : Date.now()
-//     },
-//     dateUpdated : {
-//         type : Date,
-//         required : true,
-//         'default' : Date.now()
-//     },
-//     active : {
-//         type: Boolean,
-//         'default': true
-//     }
-// });
+const criteriaSchema = new mongoose.Schema({
+    criteria_id : {
+        type : String,
+        required : true,
+        unique : true
+    },
+    content : {
+        type : String,
+        required : true
+    },
+    score : {
+        type : Number,
+        required : true,
+        min : 0,
+        max : 9
+    },
+    dateCreated : {
+        type : Date,
+        required : true,
+        'default' : Date.now()
+    },
+    dateUpdated : {
+        type : Date,
+        required : true,
+        'default' : Date.now()
+    },
+    active : {
+        type: Boolean,
+        'default': true
+    }
+});
 
-// const facetTypeSchema = new mongoose.Schema({
-//     facetType_id : {
-//         type : String,
-//         required : true,
-//         unique : true
-//     },
-//     description : {
-//         type : String,
-//         required : true
-//     },
-//     active : {
-//         type: Boolean,
-//         'default': true
-//     }
-// });
+const facetTypeSchema = new mongoose.Schema({
+    _id : {
+        type : String,
+        required : true,
+        unique : true,
+        index : true
+    },
+    description : {
+        type : String,
+        required : true
+    },
+    active : {
+        type: Boolean,
+        'default': true
+    }
+});
 
-// const facetsSchema = new mongoose.Schema({
-//     facet_id : {
-//         type : String,
-//         required : true,
-//         unique : true
-//     },
-//     description : {
-//         type : String,
-//         required : true
-//     },
-//     dateCreated : {
-//         type : Date,
-//         required : true,
-//         'default' : Date.now()
-//     },
-//     dateUpdated : {
-//         type : Date,
-//         required : true,
-//         'default' : Date.now()
-//     },
-//     active : {
-//         type: Boolean,
-//         'default': true
-//     },
-//     facetType : [facetTypeSchema],
-//     criteria : [criteriaSchema]
-// });
+const facetsSchema = new mongoose.Schema({
+    _id : {
+        type : String,
+        required : true,
+        unique : true,
+        index : true
+    },
+    description : {
+        type : String,
+        required : true
+    },
+    dateCreated : {
+        type : Date,
+        required : true,
+        'default' : Date.now()
+    },
+    dateUpdated : {
+        type : Date,
+        required : true,
+        'default' : Date.now()
+    },
+    active : {
+        type: Boolean,
+        'default': true
+    },
+    facetType : [facetTypeSchema],
+    criteria : [criteriaSchema]
+});
 
 // const scoreTypeSchema = new mongoose.Schema({
 //    scoreType_id : {
@@ -193,21 +195,23 @@ const rubricSchema = new mongoose.Schema({
     },
     rubricCreator : {
         type : String,
-        required : false
+        required : true
     },
     active : {
         type: Boolean,
         'default': true
     },
+    // subjects : {
+    //     type : [subjectsSchema],
+    //     required : false,
+    //     unique: true
+    // }
+    subjects: [subjectsSchema],
     //scoreType: [scoreTypeSchema],
-    subjects : {
-        type : [subjectsSchema],
-        required : false,
-        unique: true
-    },
+
     // levels : [levelsSchema],
     // establishedGoals : [establishedGoalsSchema],
-    // facets : [facetsSchema]
+    facets : [facetsSchema]
 });
 
 mongoose.model('Rubric', rubricSchema);

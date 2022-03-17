@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const dbURI = 'mongodb://localhost/rubricDB';
 
+require ('./rubrics');
+require ('./users');
+
 // to remind about setting up for production
 // if (process.env.NODE_ENV === 'production') {
 //     dbURI = 'whereEver this is';

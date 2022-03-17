@@ -1,27 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {RubricDataService} from "../rubric-data.service";
 
-export class Rubric {
-  constructor(id: string, name: string, description: string, dateCreated: Date, dateUpdated: Date, rubricCreator: string, active: boolean, subjects: string[]) {
-    this._id = id;
-    this.name = name;
-    this.description = description;
-    this.dateCreated = dateCreated;
-    this.dateUpdated = dateUpdated;
-    this.rubricCreator = rubricCreator;
-    this.active = active;
-    this.subjects = subjects;
-  }
-  _id: string;
-  name: string;
-  description: string;
-  dateCreated : Date;
-  dateUpdated : Date;
-  rubricCreator: string;
-  active: boolean;
-  subjects: string[]
-}
-
+import { Rubric} from "../classes/rubric";
 
 @Component({
   selector: 'app-home-list',

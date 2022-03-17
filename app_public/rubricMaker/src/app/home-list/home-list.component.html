@@ -18,7 +18,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let rubric of rubrics">
-        <td><a href="/rubric/{{rubric._id}}">{{rubric.name}}</a> </td>
+        <td><a routerLink="/rubric/{{rubric._id}}">{{rubric.name}}</a></td>
         <td>{{rubric.description}}</td>
         <td>{{rubric.dateUpdated | date}}</td>
         <td><span class="badge bg-primary m-1" *ngFor="let subject of rubric.subjects">{{subject}}</span></td>
