@@ -1,8 +1,36 @@
 const mongoose = require('mongoose');
 
-const criteriaSchema = new mongoose.Schema({
-    criteria_id : {
+const subjectsSchema = new mongoose.Schema({
+    subject_id : {
         type : String,
+        required : true,
+        unique: true,
+        index : true,
+        dropDups: true
+    },
+    description : {
+        type : String,
+        //required : true
+    },
+    dateCreated : {
+        type : Date,
+        required : true,
+        'default' : Date.now()
+    },
+    dateUpdated : {
+        type : Date,
+        required : true,
+        'default' : Date.now()
+    },
+    active : {
+        type: Boolean,
+        'default': true
+    }
+});
+
+const criteriaSchema = new mongoose.Schema({
+    _id : {
+        type : mongoose.Schema.Types.ObjectId,
         required : true,
         unique : true
     },
@@ -94,33 +122,7 @@ const facetsSchema = new mongoose.Schema({
 //     }
 // });
 
-const subjectsSchema = new mongoose.Schema({
-    _id : false,
-    subject_id : {
-        type : String,
-        required : true,
-        unique: true,
-        index : true
-    },
-    description : {
-        type : String,
-        //required : true
-    },
-    dateCreated : {
-        type : Date,
-        required : true,
-        'default' : Date.now()
-    },
-    dateUpdated : {
-        type : Date,
-        required : true,
-        'default' : Date.now()
-    },
-    active : {
-        type: Boolean,
-        'default': true
-    }
-});
+
 
 // const levelsSchema = new mongoose.Schema({
 //     level_id : {
@@ -201,12 +203,14 @@ const rubricSchema = new mongoose.Schema({
         type: Boolean,
         'default': true
     },
-    // subjects : {
-    //     type : [subjectsSchema],
-    //     required : false,
-    //     unique: true
-    // }
-    subjects: [subjectsSchema],
+    subjects : [{
+        type : subjectsSchema,
+        ref: 'Subject',
+        required : false,
+        unique : true
+
+    }],
+    //subjects: [subjectsSchema],
     //scoreType: [scoreTypeSchema],
 
     // levels : [levelsSchema],
@@ -214,4 +218,5 @@ const rubricSchema = new mongoose.Schema({
     facets : [facetsSchema]
 });
 
+mongoose.model('Subject', subjectsSchema);
 mongoose.model('Rubric', rubricSchema);

@@ -4,6 +4,7 @@ const e = require("express");
 const Rub = mongoose.model('Rubric');
 
 const subjectReadAll = (req, res) => {
+
     Rub
         .findById(req.params.rubricid)
         .select('subjects')
@@ -29,11 +30,11 @@ const subjectReadAll = (req, res) => {
 
 const subjectReadOne = (req, res) => {
 
-                // return res
-                //     .status(200)
-                //     .json({
-                //         "message": "worked"
-                //     });
+    // return res
+    //     .status(200)
+    //     .json({
+    //         "message": "worked"
+    //     });
 
     Rub
         .findById(req.params.rubricid)
@@ -170,46 +171,46 @@ const subjectDeleteOne = (req, res) => {
         return res
             .status(404)
             .json({'message': 'Not found, rubricid and subjectid are both required'});
+    }
+    Rub
+        .findById(rubricid)
+        .select('subjects')
+        .exec((err, rubric) => {
+            if (!rubric) {
+                return res
+                    .status(404)
+                    .json({'message': 'rubric not found'});
+            } else if (err) {
+                return res
+                    .status(400)
+                    .json(err);
             }
-        Rub
-            .findById(rubricid)
-            .select('subjects')
-            .exec((err, rubric) => {
-                if (!rubric) {
-                    return res
-                        .status(404)
-                        .json({'message': 'rubric not found'});
-                } else if (err) {
-                    return res
-                        .status(400)
-                        .json(err);
-                }
 
-                if (rubric.subjects && rubric.subjects.length > 0) {
-                    if (!rubric.subjects.id(subjectid)) {
-                        return res
-                            .status(404)
-                            .json({'message': 'subject not found'});
-                    } else {
-                        rubric.subjects.id(subjectid).remove();
-                        rubric.save(err => {
-                            if (err) {
-                                return res
-                                    .status(404)
-                                    .json(err);
-                            } else {
-                                res
-                                    .status(204)
-                                    .json(null);
-                            }
-                        });
-                    }
-                } else {
-                    res
+            if (rubric.subjects && rubric.subjects.length > 0) {
+                if (!rubric.subjects.id(subjectid)) {
+                    return res
                         .status(404)
-                        .json({'message': 'No subject to delete'});
+                        .json({'message': 'subject not found'});
+                } else {
+                    rubric.subjects.id(subjectid).remove();
+                    rubric.save(err => {
+                        if (err) {
+                            return res
+                                .status(404)
+                                .json(err);
+                        } else {
+                            res
+                                .status(204)
+                                .json(null);
+                        }
+                    });
                 }
-            });
+            } else {
+                res
+                    .status(404)
+                    .json({'message': 'No subject to delete'});
+            }
+        });
 };
 
 const subjectCreate = (req, res) => {
@@ -251,32 +252,32 @@ const subjectCreate = (req, res) => {
 };
 
 const doAddSubject = (req, res, rubric) => {
-  if (!rubric){
-      res
-          .status(404)
-          .json({
-              "message" : "Rubric not found"
-          });
-  } else {
-      const { subject_id, description } = req.body;
+    if (!rubric){
+        res
+            .status(404)
+            .json({
+                "message" : "Rubric not found"
+            });
+    } else {
+        const { subject_id, description } = req.body;
 
-      rubric.subjects.push({
-          subject_id,
-          description
-      });
-      rubric.save((err, rubric) => {
-          if (err){
-              res
-                  .status(400)
-                  .json(err);
-          } else {
-              const thisSubject = rubric.subjects.slice(-1).pop();
-              res
-                  .status(201)
-                  .json(thisSubject);
-          }
-      });
-  }
+        rubric.subjects.push({
+            subject_id,
+            description
+        });
+        rubric.save((err, rubric) => {
+            if (err){
+                res
+                    .status(400)
+                    .json(err);
+            } else {
+                const thisSubject = rubric.subjects.slice(-1).pop();
+                res
+                    .status(201)
+                    .json(thisSubject);
+            }
+        });
+    }
 };
 
 

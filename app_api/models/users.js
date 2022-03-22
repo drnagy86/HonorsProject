@@ -18,7 +18,10 @@ const userSchema = new mongoose.Schema({
     },
     hash: String,
     salt: String,
-    active : Boolean
+    active : {
+        type: Boolean,
+        'default': true
+    }
 });
 
 userSchema.methods.setPassword = function (password) {

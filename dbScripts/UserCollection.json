@@ -1,0 +1,75 @@
+
+db.user.drop()
+
+db.createCollection("user",
+	{
+		validator: {
+			$jsonSchema: {
+				bsonType: "object",
+				required: ["given_name", "family_name", "password_hash", "active", "roles"],
+				properties: {
+					given_name: {
+						bsonType: "string",
+						description: "Must but a string and is required"
+					},
+					family_name: {
+						bsonType: "string",
+						description: "Must but a string and is required"
+					},
+					password_hash: {
+						bsonType: "string"
+					},
+					active : {
+						bsonType: "bool",
+						description: "Must be a boolean and is required"
+					},
+					roles : {
+						bsonType: "object",
+						required: ["role_id", "description", "active"],
+						properties: {
+							role_id : {
+								bsonType: "string",
+								description: "Must be a string and is required"
+							},
+							description: {
+								bsonType: "string",
+								description: "Must be a string and is required"
+							},
+							active : {
+								bsonType: "bool",
+								description: "Must be a boolean and is required"
+							}
+						}
+					}
+				}
+			},
+		validationLevel: "strict",
+		validationAction: "error"
+		}
+	}
+)
+
+db.user.insertMany([
+	{
+		given_name : "Derrick",
+		family_name: "Nagy",
+		password_hash: "9c9064c59f1ffa2e174ee754d2979be80dd30db552ec03e7e327e9b1a4bd594e",
+		active: true,
+		roles: 
+		[
+		{
+			role_id: "Creator",
+			description: "Person that creates the events",
+			active : true
+		},
+		{
+			role_id: "Admin",
+			description: "Admin for the app",
+			active : true
+		},
+		]
+	}
+
+])
+
+
