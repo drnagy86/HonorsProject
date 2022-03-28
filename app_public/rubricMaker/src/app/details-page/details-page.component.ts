@@ -31,7 +31,7 @@ export class DetailsPageComponent implements OnInit {
         this.newRubric = newRubric;
         this.pageContent.header.title = newRubric.name;
         // send more stuff here eventually
-        this.pageContent.sidebar = newRubric.description;
+        //this.pageContent.sidebar = newRubric.description;
       });
 
 

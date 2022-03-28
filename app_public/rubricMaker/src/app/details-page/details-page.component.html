@@ -1,9 +1,12 @@
 <app-page-header [content]="pageContent.header"></app-page-header>
 <div class="row">
+
   <div class="col-12 col-md-8">
+    <app-rubric-facets *ngIf="newRubric" [rubric]="newRubric"></app-rubric-facets>
+  </div>
+  <div class="col-12 col-md-4">
     <app-rubric-details *ngIf="newRubric" [rubric]="newRubric"></app-rubric-details>
   </div>
-  <app-sidebar class="col-12 col-md-4" [content]="pageContent.sidebar">
-  </app-sidebar>
+<!--  <app-sidebar class="col-12 col-md-4" [content]="pageContent.sidebar"></app-sidebar>-->
 </div>
 

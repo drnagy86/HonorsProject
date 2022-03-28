@@ -19,6 +19,7 @@ import { RubricDetailsComponent } from './rubric-details/rubric-details.componen
 import { DetailsPageComponent } from './details-page/details-page.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { RubricFacetsComponent } from './rubric-facets/rubric-facets.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { LoginComponent } from './login/login.component';
     RubricDetailsComponent,
     DetailsPageComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    RubricFacetsComponent
   ],
   imports: [
     BrowserModule,

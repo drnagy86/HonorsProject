@@ -1,0 +1,23 @@
+<div class="container mt-3">
+  <table class="table">
+    <thead>
+    <tr>
+      <th></th>
+      <th *ngFor="let score of scoreRange">
+        {{ score }}
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let facet of rubric.facets">
+        <th>
+          {{ facet._id }}
+        </th>
+        <td *ngFor="let criteria of facet.criteria">
+            {{ criteria.content }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

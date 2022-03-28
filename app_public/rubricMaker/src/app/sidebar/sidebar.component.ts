@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {Rubric} from "../classes/rubric";
 
 @Component({
   selector: 'app-sidebar',
@@ -9,7 +10,7 @@ export class SidebarComponent implements OnInit {
 
 
 
-  @Input() content: string | any;
+  @Input() content: Rubric | any;
 
   constructor() { }
 
