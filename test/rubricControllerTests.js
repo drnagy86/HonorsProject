@@ -5,10 +5,13 @@ const app = require('../app');
 
 let Rubric = require('../app_api/models/rubrics');
 
+
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../app');
+const mongoose = require("mongoose");
 let should = chai.should();
+const Rub = mongoose.model('Rubric');
 
 chai.use(chaiHttp);
 // used this resource
@@ -32,8 +35,8 @@ describe('Rubrics', () => {
                 .get('/rubrics')
                 .end((err, res) => {
                     res.should.have.status(200);
-                    //res.body.should.be.a('array');
-                    // res.body.length.should.be.eql(0);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(2);
                     done();
                 });
         });
@@ -76,39 +79,41 @@ describe('Rubrics', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
 
-                    // res.body.should.be.a('object');
-                    // res.body.rubric.should.have.property('rubric name');
-                    // res.body.rubric.should.have.property('description');
-                    // res.body.rubric.should.have.property('creator');
+                    res.body.should.be.a('object');
+                    res.body.rubric.should.have.property('rubric name');
+                    res.body.rubric.should.have.property('description');
+                    res.body.rubric.should.have.property('creator');
 
                 });
             done();
         }));
     });
-    // test /GET/:id route
-    // describe('/GET/:id rubric', () => {
-    //     it('should GET a rubric by id', (done) => {
-    //         let rubric = {
-    //             name : "rubric name",
-    //             description : "description",
-    //             rubricCreator : "creator"
-    //         };
-    //         rubric.save((err, rubric) => {
-    //             chai.request(server)
-    //                 .get('/rubrics/' + rubric.id)
-    //                 .send(rubric)
-    //                 .end((err, res) => {
-    //                     res.should.have.status(200);
-    //                     res.body.should.be.a('object');
-    //                     res.body.rubric.should.have.property('rubric name');
-    //                     res.body.rubric.should.have.property('description');
-    //                     res.body.rubric.should.have.property('creator');
-    //                     res.body.rubric.should.have.property('_id').eql(rubric.id);
-    //                    done();
-    //                 });
-    //         })
-    //     });
-    // })
+    //test /GET/:id route
+    describe('/GET/:id rubric', () => {
+        it('should GET a rubric by id', (done) => {
+            let rubric = {
+                _id : "623378f7c6240ef7cb5882c6",
+                name : "Writing Rubric",
+                description : "A rubric to evaluate writing.",
+                rubricCreator : "test@company.com"
+            };
+
+            chai.request(server)
+                .get('/rubrics/' + rubric._id)
+                // .send(rubric)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property("name").eql(rubric.name);
+                    res.body.should.have.property("description").eql(rubric.description);
+                    res.body.should.have.property("rubricCreator").eql(rubric.rubricCreator);
+                    res.body.should.have.property('_id').eql(rubric._id);
+
+                });
+            done();
+
+        });
+    })
 
 
 

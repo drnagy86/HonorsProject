@@ -20,6 +20,8 @@ import { DetailsPageComponent } from './details-page/details-page.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { RubricFacetsComponent } from './rubric-facets/rubric-facets.component';
+import { CreateRubricComponent } from './create-rubric/create-rubric.component';
+
 
 
 @NgModule({
@@ -35,14 +37,16 @@ import { RubricFacetsComponent } from './rubric-facets/rubric-facets.component';
     DetailsPageComponent,
     RegisterComponent,
     LoginComponent,
-    RubricFacetsComponent
+    RubricFacetsComponent,
+    CreateRubricComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [{provide: APP_BASE_HREF, useValue:'/'}],
   bootstrap: [FrameworkComponent]

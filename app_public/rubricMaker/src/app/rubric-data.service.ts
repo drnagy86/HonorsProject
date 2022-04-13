@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders} from "@angular/common/http";
 import {Rubric, Subject} from "./classes/rubric";
 import {lastValueFrom} from "rxjs";
 import {environment} from "../environments/environment";
 import {User} from "./classes/user";
 import {AuthResponse} from "./classes/authResponse";
+import {AuthenticationService} from "./authentication.service";
+import { BROWSER_STORAGE} from "./classes/storage";
 
 
 @Injectable({
@@ -49,6 +51,23 @@ export class RubricDataService {
       .catch(this.handleError);
   }
 
+  public createNewRubric(formData: Rubric): Promise<Rubric> {
+    const url: string = `${this.apiBaseUrl}/rubrics`;
+    //console.log(this.storage.getItem('rubricMaker-token'));
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization' : `Bearer ${this.storage.getItem('rubricMaker-token')}`
+      })
+    };
+
+    // formData.rubricCreator = this.authenticationService.getCurrentUser();
+
+    return lastValueFrom(this.http.post(url, formData, httpOptions))
+      .then(response => response as Rubric)
+      .catch(this.handleError)
+      ;
+  }
+
   public login(user: User): Promise<AuthResponse>{
     return this.makeAuthAPICall('login', user);
   }
@@ -69,7 +88,10 @@ export class RubricDataService {
     return Promise.reject(error.message || error);
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    @Inject(BROWSER_STORAGE) private storage : Storage
+    ) { }
 
 
 }

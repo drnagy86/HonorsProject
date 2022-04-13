@@ -10,7 +10,7 @@ const ctrlCriteria = require('../controllers/criteria')
 const jwt = require('express-jwt');
 const auth = jwt({
     secret : process.env.JWT_SECRET,
-    algorithms: ['HS512'], // https://github.com/auth0/express-jwt#required-parameters
+    algorithms: ['sha1', 'RS256', 'HS256','HS512'], // https://github.com/auth0/express-jwt#required-parameters
     userProperty: 'payload'     //defines a property on request to be called 'payload'
 });
 
@@ -18,8 +18,8 @@ const auth = jwt({
 router
     .route('/rubrics')
     .get(ctrlRubrics.rubricsList)
-    .post(ctrlRubrics.rubricCreate);
-    //.post(auth, ctrlRubrics.rubricCreate);
+    //.post(ctrlRubrics.rubricCreate);
+    .post(auth, ctrlRubrics.rubricCreate);
 router
     .route('/rubrics/:rubricid')
     .get(ctrlRubrics.rubricReadOne)

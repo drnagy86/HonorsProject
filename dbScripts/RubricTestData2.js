@@ -1,10 +1,10 @@
 
 db = connect( "mongodb://localhost/rubricDB")
  
-db.dropDatabase()
+// db.dropDatabase()
 
 db.users.insertOne(
-	{	
+	{
 		_id : ObjectId("62337982dd76768c63cb9474"),
 		email : 'test@company.com',
 		givenName : 'Tess',

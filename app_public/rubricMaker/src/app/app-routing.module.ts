@@ -5,6 +5,7 @@ import {AboutComponent} from "./about/about.component";
 import {DetailsPageComponent} from "./details-page/details-page.component";
 import {RegisterComponent} from "./register/register.component";
 import {LoginComponent} from "./login/login.component";
+import {CreateRubricComponent} from "./create-rubric/create-rubric.component";
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'create-rubric',
+    component: CreateRubricComponent
   }
 ];
 

@@ -30,8 +30,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'app_public', 'rubricMaker/build')));
+
+
 // passport should be initialized in app.js after the static
 // routes have been defined and before the routes that are going
 // to use authentication
@@ -48,10 +53,8 @@ app.use('/api', (req, res, next) => {
 });
 
 
-
-
-
 app.use('/api', apiRouter);
+app.use('/', apiRouter);
 //app.use('/users', usersRouter);
 
 // send to all routes, but probably not great for production

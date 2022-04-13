@@ -7,6 +7,7 @@ export class Criteria {
     this.dateUpdate = dateUpdate;
     this.active = active;
   }
+
   _id : string;
   content: string;
   score: number;
@@ -39,9 +40,6 @@ export class Facets {
   active: boolean;
   criteria: Criteria[];
 }
-
-
-
 
 export class Subject {
   constructor(

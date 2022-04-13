@@ -1,0 +1,152 @@
+
+
+
+<div class="row mt-sm-5">
+  <h2>Create a Rubric</h2>
+  <form [formGroup]="rubricForm" (ngSubmit)="onSubmit()">
+    <fieldset>
+        <div class="form-group col-md-4">
+          <label for="title">Title:</label>
+          <input class="form-control" id="title" type="text" formControlName="title" required>
+          <div class="row-height-30">
+            <div *ngIf="title != null && title.invalid && (title.dirty || title.touched)">
+              <div *ngIf="title.errors?.['required']">
+                <label class="text-danger">A title is required.</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-8">
+          <label for="description">Description:</label>
+          <textarea class="form-control" id="description" formControlName="description" rows="3"></textarea>
+          <div class="row-height-30">
+            <div *ngIf="description != null && description.invalid && (description.dirty || description.touched)">
+              <div *ngIf="description.errors?.['required']">
+                <label class="text-danger">A description is required.</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="form-group">
+
+        <h3 class="">Subjects</h3>
+        <p>Add a subject or multiple subjects for your rubric.</p>
+        <div class="d-flex">
+          <button class="btn btn-outline-dark m-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Add +</button>
+          <button *ngFor="let subject of rubric.subjects"
+                  class="btn btn-sm btn-dark m-2"
+                  data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ subject.description}}">
+            {{subject.subject_id}}
+          </button>
+        </div>
+      </div>
+      <div class="row-height-30"></div>
+      <div class="row">
+        <div class="row">
+        <h3>Facet Score Range</h3>
+        <p>Analytic rubrics are made of facets. Select a bottom score that represents the lowest level of achievement for a facet and a top score representing the highest.</p>
+        </div>
+        <div class="form-group col-md-6">
+          <div class="d-flex justify-content-around">
+            <label>0</label>
+            <label class="text-primary" for="bottomScore">Bottom score: {{ rubricForm.controls["bottomScore"].value}}</label>
+            <label>8</label>
+          </div>
+          <input  (change)="checkScoreRange()" class="form-range" id="bottomScore" type="range" formControlName="bottomScore" min="0" max="8"/>
+        </div>
+        <div class="form-group col-md-6">
+          <div class="d-flex justify-content-around">
+            <label>1</label>
+            <label class="text-primary" for="topScore">Top score: {{ rubricForm.controls["topScore"].value}}</label>
+            <label>9</label>
+          </div>
+          <input class="form-range" id="topScore" type="range" formControlName="topScore" min="1" max="9" (change)="checkScoreRange()"/>
+          <div class="row-height-30">
+            <div *ngIf="bottomScoreIsHigherThanTopErrorMessage != ''" >
+              <div *ngIf="topScore != null && bottomScore != null && bottomScoreIsHigherThanTopErrorMessage != '' && (topScore.dirty || topScore.touched) && (bottomScore.dirty || bottomScore.touched)">
+                <label class="text-danger">{{bottomScoreIsHigherThanTopErrorMessage}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    <div class="modal fade" id="addSubjectModal">
+      <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Subjects</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <fieldset  formGroupName="subjects">
+              <legend>Add a Subject</legend>
+              <fieldset class="form-group">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input
+                      type="radio" class="form-check-input"
+                      name="radSubject" id="optChooseSubject" value="optChooseSubject"
+                      checked =""
+                      (change)="addNewSubjectFormVisible = false"
+                    >
+                    Choose a subject
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input
+                      type="radio" class="form-check-input"
+                      name="radSubject" id="optNewSubject" value="optNewSubject"
+                      (change)="addNewSubjectFormVisible = true"
+                    >
+                    Create a new subject
+                  </label>
+                </div>
+              </fieldset>
+              <div class="form-group" *ngIf="addNewSubjectFormVisible === false" >
+                <label for="selectSubject" class="form-label mt-4">Subjects</label>
+                <select class="form-select" id="selectSubject" formControlName="chooseSubjectName">
+                  <option></option>
+                  <option>ESL</option>
+                  <option>Writing</option>
+                  <option>Reading</option>
+                </select>
+              </div>
+              <div *ngIf="subjectFormError" class="alert alert-danger" role="alert">
+                {{ subjectFormError}}
+              </div>
+              <div *ngIf="addNewSubjectFormVisible === true">
+                <div class="form-group">
+                  <label for="txtSubjectName" class="form-label mt-4">Subject Name</label>
+                  <input formControlName="newSubjectName" name="subject_id" type="text" class="form-control" id="txtSubjectName" placeholder="Enter Subject" required>
+                </div>
+                <div class="form-group">
+                  <label for="txtAreaSubjectDescription" class="form-label mt-4">Subject Description</label>
+                  <textarea formControlName="newSubjectDescription" name="description" class="form-control" id="txtAreaSubjectDescription" rows="2"></textarea>
+                </div>
+              </div>
+            </fieldset>
+
+          </div>
+          <div class="modal-footer">
+            <div class="form-group row m-2">
+              <div class="col-12">
+                <button (click)="addSubject()" class="btn btn-primary m-1" data-bs-dismiss="modal">Add Subject</button>
+                <button (click)="resetSubjectForm()" type="button" class="btn btn-danger m-1" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <button type="submit" [disabled]="!rubricForm.valid" role="button" class="btn btn-primary">Create</button>
+      <button (click)="cancelCreatingRubric()" role="button" class="btn btn-danger">Cancel</button>
+    </div>
+
+
+  </form>
+</div>

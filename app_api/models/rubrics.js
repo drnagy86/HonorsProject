@@ -102,8 +102,21 @@ const facetsSchema = new mongoose.Schema({
         type: Boolean,
         'default': true
     },
-    facetType : [facetTypeSchema],
-    criteria : [criteriaSchema]
+    facetType : [{
+        type : facetTypeSchema,
+        ref: 'FacetType',
+        required : false,
+        unique : false
+
+    }],
+    criteria : [{
+        type : criteriaSchema,
+        ref: 'Criteria',
+        required : false,
+        unique : false
+
+    }]
+
 });
 
 // const scoreTypeSchema = new mongoose.Schema({
@@ -215,7 +228,13 @@ const rubricSchema = new mongoose.Schema({
 
     // levels : [levelsSchema],
     // establishedGoals : [establishedGoalsSchema],
-    facets : [facetsSchema]
+    facets : [{
+        type : facetsSchema,
+        ref: 'Facet',
+        required : false,
+        unique : false
+
+    }]
 });
 
 mongoose.model('Subject', subjectsSchema);

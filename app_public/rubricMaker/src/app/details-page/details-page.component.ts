@@ -44,6 +44,6 @@ export class DetailsPageComponent implements OnInit {
 
     },
     sidebar: ''
-};
+  };
 
 }
