@@ -27,7 +27,12 @@ router
     // .delete(auth, ctrlRubrics.rubricDeleteOne)
     .put(auth, ctrlRubrics.rubricUpdateOne)
     .delete(auth, ctrlRubrics.rubricDeleteOne)
+
+
 // subjects
+router.route('/subjects')
+    .get(ctrlSubjects.allSubjects)
+
 router
     .route('/rubrics/:rubricid/subjects')
     .get(ctrlSubjects.subjectReadAll)

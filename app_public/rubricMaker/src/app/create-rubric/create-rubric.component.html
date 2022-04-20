@@ -2,9 +2,34 @@
 
 
 <div class="row mt-sm-5">
-  <h2>Create a Rubric</h2>
-  <form [formGroup]="rubricForm" (ngSubmit)="onSubmit()">
+  <h2>Create a Rubric : Set Up</h2>
+  <form [formGroup]="rubricForm" >
+
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#createRubric" [ngClass]= "{'active': activeTab === 'createRubric'}" (click)="changeTab('createRubric')" >Title</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#addSubjects"
+           [ngClass]= "{
+           'active': activeTab === 'addSubjects',
+           'disabled': rubricIsCreated === false
+           }"
+           (click)="changeTab('addSubjects')">Subjects</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#facetScoreRange" [ngClass]= "{
+        'active': activeTab === 'facetScoreRange',
+        'disabled': rubricIsCreated === false
+        }" (click)="changeTab('facetScoreRange')">Score Range</a>
+      </li>
+    </ul>
+
     <fieldset>
+
+      <div class="tab-content">
+      <div class="tab-pane fade show" id="createRubric" [ngClass]= "{'active': activeTab === 'createRubric'}">
+        <h3 class="mt-2">Title</h3>
         <div class="form-group col-md-4">
           <label for="title">Title:</label>
           <input class="form-control" id="title" type="text" formControlName="title" required>
@@ -27,48 +52,73 @@
             </div>
           </div>
         </div>
-      <div class="form-group">
-
-        <h3 class="">Subjects</h3>
-        <p>Add a subject or multiple subjects for your rubric.</p>
-        <div class="d-flex">
-          <button class="btn btn-outline-dark m-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Add +</button>
-          <button *ngFor="let subject of rubric.subjects"
-                  class="btn btn-sm btn-dark m-2"
-                  data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ subject.description}}">
-            {{subject.subject_id}}
-          </button>
+        <div class="form-group">
+          <button type="submit" [disabled]="!rubricForm.valid" role="button" class="btn btn-primary m-2" (click)="onRubricSubmit()">{{btnCreate}}</button>
+          <button (click)="cancelCreatingRubric()" role="button" class="btn btn-danger m-2">Cancel</button>
         </div>
       </div>
-      <div class="row-height-30"></div>
-      <div class="row">
+      <div class="tab-pane fade" id="addSubjects"
+           [ngClass]= "{
+           'active': activeTab === 'addSubjects',
+           'show': activeTab === 'addSubjects'
+           }">
+        <div class="form-group">
+          <h3 class="mt-2">Subjects</h3>
+          <p>Add a subject or multiple subjects for your rubric.</p>
+          <div class="d-flex">
+            <button class="btn btn-outline-dark m-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">+ Add Subject</button>
+            <button *ngFor="let subject of rubric.subjects"
+                    class="btn btn-sm btn-dark m-2"
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ subject.description}}">
+              {{subject.subject_id}}
+            </button>
+          </div>
+        </div>
         <div class="row">
-        <h3>Facet Score Range</h3>
-        <p>Analytic rubrics are made of facets. Select a bottom score that represents the lowest level of achievement for a facet and a top score representing the highest.</p>
-        </div>
-        <div class="form-group col-md-6">
-          <div class="d-flex justify-content-around">
-            <label>0</label>
-            <label class="text-primary" for="bottomScore">Bottom score: {{ rubricForm.controls["bottomScore"].value}}</label>
-            <label>8</label>
+          <div class="col-3">
+            <button class="btn btn-primary m-2" (click)="readyToAddSubjects()">Choose Score Range</button>
           </div>
-          <input  (change)="checkScoreRange()" class="form-range" id="bottomScore" type="range" formControlName="bottomScore" min="0" max="8"/>
         </div>
-        <div class="form-group col-md-6">
-          <div class="d-flex justify-content-around">
-            <label>1</label>
-            <label class="text-primary" for="topScore">Top score: {{ rubricForm.controls["topScore"].value}}</label>
-            <label>9</label>
+      </div>
+      <div class="tab-pane fade" id="facetScoreRange" [ngClass]= "{
+      'active': activeTab === 'facetScoreRange',
+      'show': activeTab === 'facetScoreRange'
+      }">
+        <div class="row">
+          <div class="row">
+            <h3 class="mt-2">Facet Score Range</h3>
+            <p>Analytic rubrics are made of facets. Select a bottom score that represents the lowest level of achievement for a facet and a top score representing the highest.</p>
           </div>
-          <input class="form-range" id="topScore" type="range" formControlName="topScore" min="1" max="9" (change)="checkScoreRange()"/>
-          <div class="row-height-30">
-            <div *ngIf="bottomScoreIsHigherThanTopErrorMessage != ''" >
-              <div *ngIf="topScore != null && bottomScore != null && bottomScoreIsHigherThanTopErrorMessage != '' && (topScore.dirty || topScore.touched) && (bottomScore.dirty || bottomScore.touched)">
-                <label class="text-danger">{{bottomScoreIsHigherThanTopErrorMessage}}</label>
+          <div class="form-group col-md-6">
+            <div class="d-flex justify-content-around">
+              <label>0</label>
+              <label class="text-primary" for="bottomScore">Bottom score: {{ rubricForm.controls["bottomScore"].value}}</label>
+              <label>8</label>
+            </div>
+            <input  (change)="checkScoreRange()" class="form-range" id="bottomScore" type="range" formControlName="bottomScore" min="0" max="8"/>
+          </div>
+          <div class="form-group col-md-6">
+            <div class="d-flex justify-content-around">
+              <label>1</label>
+              <label class="text-primary" for="topScore">Top score: {{ rubricForm.controls["topScore"].value}}</label>
+              <label>9</label>
+            </div>
+            <input class="form-range" id="topScore" type="range" formControlName="topScore" min="1" max="9" (change)="checkScoreRange()"/>
+            <div class="row-height-30">
+              <div *ngIf="bottomScoreIsHigherThanTopErrorMessage != ''" >
+                <div *ngIf="topScore != null && bottomScore != null && bottomScoreIsHigherThanTopErrorMessage != '' && (topScore.dirty || topScore.touched) && (bottomScore.dirty || bottomScore.touched)">
+                  <label class="text-danger">{{bottomScoreIsHigherThanTopErrorMessage}}</label>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-3">
+            <button class="btn btn-primary m-2" >Start Creating Rubric</button>
+          </div>
+        </div>
+      </div>
       </div>
     </fieldset>
     <div class="modal fade" id="addSubjectModal">
@@ -90,7 +140,7 @@
                       type="radio" class="form-check-input"
                       name="radSubject" id="optChooseSubject" value="optChooseSubject"
                       checked =""
-                      (change)="addNewSubjectFormVisible = false"
+                      (change)="isAddingNewSubject = false"
                     >
                     Choose a subject
                   </label>
@@ -100,25 +150,23 @@
                     <input
                       type="radio" class="form-check-input"
                       name="radSubject" id="optNewSubject" value="optNewSubject"
-                      (change)="addNewSubjectFormVisible = true"
+                      (change)="isAddingNewSubject = true"
                     >
                     Create a new subject
                   </label>
                 </div>
               </fieldset>
-              <div class="form-group" *ngIf="addNewSubjectFormVisible === false" >
+              <div class="form-group" *ngIf="isAddingNewSubject === false" >
                 <label for="selectSubject" class="form-label mt-4">Subjects</label>
                 <select class="form-select" id="selectSubject" formControlName="chooseSubjectName">
                   <option></option>
-                  <option>ESL</option>
-                  <option>Writing</option>
-                  <option>Reading</option>
+                  <option *ngFor="let subject of subjects">{{subject.subject_id}}</option>
                 </select>
               </div>
               <div *ngIf="subjectFormError" class="alert alert-danger" role="alert">
                 {{ subjectFormError}}
               </div>
-              <div *ngIf="addNewSubjectFormVisible === true">
+              <div *ngIf="isAddingNewSubject === true">
                 <div class="form-group">
                   <label for="txtSubjectName" class="form-label mt-4">Subject Name</label>
                   <input formControlName="newSubjectName" name="subject_id" type="text" class="form-control" id="txtSubjectName" placeholder="Enter Subject" required>
@@ -142,11 +190,46 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
-      <button type="submit" [disabled]="!rubricForm.valid" role="button" class="btn btn-primary">Create</button>
-      <button (click)="cancelCreatingRubric()" role="button" class="btn btn-danger">Cancel</button>
-    </div>
 
+    <div class="container mt-3">
+      <table class="table">
+        <thead>
+        <tr>
+          <th></th>
+          <th *ngFor="let score of scoreArray">
+            {{score}}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+<!--        <tr>-->
+<!--          <td>-->
+<!--            test-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--        <tr *ngFor="let facet of rubric.facets">-->
+<!--          <th>-->
+<!--            {{ facet._id }}-->
+<!--          </th>-->
+<!--          <td *ngFor="let criteria of facet.criteria">-->
+<!--            {{ criteria.content }}-->
+<!--          </td>-->
+<!--        </tr>-->
+          <tr *ngFor="let facet of rubric.facets">
+            <th>
+              {{ facet._id }}
+            </th>
+            <td *ngFor="let criteria of facet.criteria">
+              <input type="text" value="{{ criteria.content }}"/>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
 
   </form>
 </div>
+
+
+

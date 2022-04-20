@@ -9,6 +9,7 @@ import {AuthenticationService} from "./authentication.service";
 import { BROWSER_STORAGE} from "./classes/storage";
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,6 +29,30 @@ export class RubricDataService {
       .catch(this.handleError);
 
   }
+
+  public getSubjects(): Promise<Subject[]>{
+    //build url
+    const url: string = `${this.apiBaseUrl}/subjects`;
+
+    // return lastValueFrom(this.http.get(url))// makes the HTTP GET call to url
+    //   .then(response => {
+    //     console.log(response)
+    //     return response as Subject[];
+    //   }) // converts response to JSON object of type Subject
+    //   .catch(this.handleError);
+
+    return lastValueFrom(this.http.get(url))// makes the HTTP GET call to url
+      .then(response => {
+        // console.log(response)
+        let test = response as Subject[];
+        // console.log(test);
+
+        return test;
+      }) // converts response to JSON object of type Subject
+      .catch(this.handleError);
+
+  }
+
 
   public getRubricById(rubricId: string | null): Promise<Rubric>{
     const url: string = `${this.apiBaseUrl}/rubrics/${rubricId}`;

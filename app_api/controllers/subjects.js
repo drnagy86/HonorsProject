@@ -1,10 +1,50 @@
+
 const mongoose = require('mongoose')
 const {response} = require("express");
 const e = require("express");
 const Rub = mongoose.model('Rubric');
 
-const subjectReadAll = (req, res) => {
+const allSubjects = (req, res) =>{
 
+    Rub
+        .find()
+        .exec((err, rubrics) => {
+            if (!rubrics) {
+                return res
+                    .status(404)
+                    .json({
+                        "message": "no rubrics found"
+                    });
+            } else if (err) {
+                return res
+                    .status(400)
+                    .json(err);
+            }
+            res
+                .status(200)
+                // .json(rubrics);
+                .json(findAllSubjects(rubrics));
+        });
+};
+
+function findAllSubjects(rubrics) {
+
+    let testDictionary = {};
+
+    for (let i = 0; i < rubrics.length; i++) {
+        if (rubrics[i].subjects.length > 0){
+            for (let j = 0; j < rubrics[i].subjects.length; j++) {
+                testDictionary[rubrics[i].subjects[j].subject_id] = rubrics[i].subjects[j];
+            }
+        }
+    }
+
+    const values = Object.values(testDictionary);
+
+    return values;
+}
+
+const subjectReadAll = (req, res) => {
     Rub
         .findById(req.params.rubricid)
         .select('subjects')
@@ -283,6 +323,7 @@ const doAddSubject = (req, res, rubric) => {
 
 
 module.exports = {
+    allSubjects,
     subjectReadAll,
     subjectCreate,
     subjectReadOne,
