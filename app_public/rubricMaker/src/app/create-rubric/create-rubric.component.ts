@@ -29,6 +29,7 @@ export class CreateRubricComponent implements OnInit {
   public btnCreate : string = (!this.rubricIsCreated)?"Create": "Edit";
   public subjects : Subject[] = [];
   public isReadyToAddSubjects : boolean = false;
+  public isFacetTableVisible: boolean = false;
 
   changeTab(activeTab : string){
     this.activeTab = activeTab;
@@ -87,12 +88,14 @@ export class CreateRubricComponent implements OnInit {
     [],
     []);
 
-
   constructor(
     private rubricDataService: RubricDataService,
     private fb : FormBuilder,
     private authenticationService: AuthenticationService
   ) { }
+
+  topScoreNumber : number = 4;
+  bottomScoreNumber : number = 0;
 
   ngOnInit(): void {
     // this.setUpTable();
@@ -128,9 +131,6 @@ export class CreateRubricComponent implements OnInit {
   }
 
   async onRubricSubmit() {
-
-    console.log("onRubricSubmit");
-
     if (this.rubricForm.status === 'VALID' && this.rubricIsCreated== false) {
       const user: User = this.authenticationService.getCurrentUser();
 
@@ -147,9 +147,6 @@ export class CreateRubricComponent implements OnInit {
       }
       this.btnCreate = (!this.rubricIsCreated)?"Create": "Edit"
     }
-
-
-
   }
 
   private formIsValid(): boolean {
@@ -165,7 +162,6 @@ export class CreateRubricComponent implements OnInit {
     this.newSubject.description = '';
     this.subjectFormError = '';
     this.subjectFormVisible = false;
-
   }
 
   addSubject() {
@@ -208,21 +204,21 @@ export class CreateRubricComponent implements OnInit {
   }
 
   setUpTable(){
-    this.scoreArray = [];
-    for (let i = this.bottomScore?.value; i < this.topScore?.value + 1; i++) {
-      this.scoreArray.push(i);
-    }
-
-    this.setUpTable();
-    let blankCriteria : Criteria = new Criteria('','',0, new Date(Date.now()) ,new Date(Date.now()),true);
-    let blankCriteriaList : Criteria[] = [];
-
-    for (let i = this.bottomScore?.value; i < this.topScore?.value + 1; i++) {
-
-      blankCriteriaList.push(new Criteria('test',i + " Test",i, new Date(Date.now()) ,new Date(Date.now()),true))
-    }
-    let blankFacet : Facets = new Facets('test','',new Date(Date.now()),new Date(Date.now()),true, blankCriteriaList);
-    this.rubric.facets.push(blankFacet);
+    // this.scoreArray = [];
+    // for (let i = this.bottomScore?.value; i < this.topScore?.value + 1; i++) {
+    //   this.scoreArray.push(i);
+    // }
+    //
+    // this.setUpTable();
+    // let blankCriteria : Criteria = new Criteria('','',0, new Date(Date.now()) ,new Date(Date.now()),true);
+    // let blankCriteriaList : Criteria[] = [];
+    //
+    // for (let i = this.bottomScore?.value; i < this.topScore?.value + 1; i++) {
+    //
+    //   blankCriteriaList.push(new Criteria('test',i + " Test",i, new Date(Date.now()) ,new Date(Date.now()),true))
+    // }
+    // let blankFacet : Facets = new Facets('test','',new Date(Date.now()),new Date(Date.now()),true, blankCriteriaList);
+    // this.rubric.facets.push(blankFacet);
   }
 
   getAllSubjects() : void{
@@ -248,6 +244,13 @@ export class CreateRubricComponent implements OnInit {
       }
     }
     this.changeTab('facetScoreRange');
+  }
+
+  sendScoreRangeToFacets() {
+    this.topScoreNumber = this.topScore?.value;
+    this.bottomScoreNumber = this.bottomScore?.value;
+    this.isFacetTableVisible = true;
+
   }
 }
 export const topAndBottomScoreValidation : ValidatorFn = (control : AbstractControl) : ValidationErrors | null => {

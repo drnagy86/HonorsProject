@@ -6,6 +6,7 @@ import {DetailsPageComponent} from "./details-page/details-page.component";
 import {RegisterComponent} from "./register/register.component";
 import {LoginComponent} from "./login/login.component";
 import {CreateRubricComponent} from "./create-rubric/create-rubric.component";
+import {FacetsComponent} from "./facets/facets.component";
 
 const routes: Routes = [
   {
@@ -31,8 +32,13 @@ const routes: Routes = [
   {
     path: 'create-rubric',
     component: CreateRubricComponent
+  },
+  {
+    path: 'facets',
+    component: FacetsComponent
   }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

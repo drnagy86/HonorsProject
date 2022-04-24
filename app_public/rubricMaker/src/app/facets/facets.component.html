@@ -1,1 +1,104 @@
-<p>facets works!</p>
+<div class="container mt-3">
+
+  <!--  <div [formGroup]="facetForm">-->
+  <!--    <h2>Facet</h2>-->
+  <!--    <label for="facetID">Facet: </label>-->
+  <!--    <input id="facetID" type="text" formControlName="facetFormName">-->
+
+  <!--    <div formArrayName="criteriaInputs">-->
+
+  <!--      <button type="button" (click)="addCriteriaInput()">+Add criteria</button>-->
+
+  <!--      <div *ngFor="let criteria of criteriaInputs.controls; let i=index">-->
+  <!--        <label for="criteria-{{ i }}">Criteria {{ i }}</label>-->
+  <!--        <input id="criteria-{{ i }}" type="text" formControlName="i">-->
+  <!--      </div>-->
+
+  <!--    </div>-->
+
+
+  <!--  </div>-->
+
+  <h2>Input Criteria for the Facets</h2>
+  <p>In the input boxes, write the criteria for earning the score for the facet.</p>
+  <form [formGroup]="facetForm" (ngSubmit)="addFacet()">
+
+
+  <div class="row">
+    <p class="col">Facet</p>
+    <p class="col ms-4" *ngFor="let score of scoreArray">
+      {{score}}
+    </p>
+    <p class="col"></p>
+  </div>
+  <div class="row">
+    <div class="col">
+      <input id="facetID" type="text" formControlName="facetFormName">
+    </div>
+<!--    <div *ngFor="let criteria of criteriaInputs.controls; let i=index" class="col">-->
+<!--      <input id="criteria-{{ i }}" type="text" formControlName="i">-->
+<!--    </div>-->
+    <div class="col">
+      <input formControlName="1"/>
+    </div>
+    <div class="col">
+      <input formControlName="2"/>
+    </div>
+    <div class="col">
+      <input formControlName="3"/>
+    </div>
+    <div class="col">
+      <input formControlName="4"/>
+    </div>
+    <div class="col">
+      <span class="col-1">
+      <input type="submit" class="btn btn-primary" (click)="addFacet()" value="+">
+      </span>
+    </div>
+  </div>
+<!--    <div *ngFor="let criteria of criteriaInputs.controls" class="row">-->
+<!--      {{criteria.value}}-->
+<!--    </div>-->
+
+  </form>
+
+  <!--    <table class="table">-->
+  <!--      <thead>-->
+  <!--      <tr>-->
+  <!--        <th></th>-->
+  <!--        <th *ngFor="let score of scoreArray">-->
+  <!--          {{score}}-->
+  <!--        </th>-->
+  <!--      </tr>-->
+  <!--      </thead>-->
+  <!--      <tbody>-->
+  <!--      <tr>-->
+  <!--        <td>-->
+  <!--            <label for="facetID" class="me-1">Facet:</label>-->
+  <!--            <input id="facetID" type="text" formControlName="facetFormName">-->
+  <!--        </td>-->
+  <!--        <td *ngFor="let criteria of criteriaInputs.controls; let i=index">-->
+  <!--          <label for="criteria-{{ i }}">Criteria {{ i }}</label>-->
+  <!--          <input id="criteria-{{ i }}" type="text" formControlName="i">-->
+  <!--        </td>-->
+  <!--      </tr>-->
+  <!--      <tr *ngFor="let facet of rubric.facets">-->
+  <!--        <th>-->
+  <!--          {{ facet._id }}-->
+  <!--        </th>-->
+  <!--        <td *ngFor="let criteria of facet.criteria">-->
+  <!--          {{ criteria.content }}-->
+  <!--        </td>-->
+  <!--      </tr>-->
+  <!--      good for edit-->
+  <!--      <tr *ngFor="let facet of rubric.facets">-->
+  <!--        <th>-->
+  <!--          {{ facet._id }}-->
+  <!--        </th>-->
+  <!--        <td *ngFor="let criteria of facet.criteria">-->
+  <!--          <input type="text" value="{{ criteria.content }}"/>-->
+  <!--        </td>-->
+  <!--      </tr>-->
+  <!--      </tbody>-->
+  <!--    </table>-->
+</div>

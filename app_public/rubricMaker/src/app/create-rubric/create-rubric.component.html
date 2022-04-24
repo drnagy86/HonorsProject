@@ -115,7 +115,7 @@
         </div>
         <div class="row">
           <div class="col-3">
-            <button class="btn btn-primary m-2" >Start Creating Rubric</button>
+            <button class="btn btn-primary m-2" (click)="sendScoreRangeToFacets()" >Start Creating Rubric</button>
           </div>
         </div>
       </div>
@@ -191,44 +191,12 @@
       </div>
     </div>
 
-    <div class="container mt-3">
-      <table class="table">
-        <thead>
-        <tr>
-          <th></th>
-          <th *ngFor="let score of scoreArray">
-            {{score}}
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-<!--        <tr>-->
-<!--          <td>-->
-<!--            test-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        <tr *ngFor="let facet of rubric.facets">-->
-<!--          <th>-->
-<!--            {{ facet._id }}-->
-<!--          </th>-->
-<!--          <td *ngFor="let criteria of facet.criteria">-->
-<!--            {{ criteria.content }}-->
-<!--          </td>-->
-<!--        </tr>-->
-          <tr *ngFor="let facet of rubric.facets">
-            <th>
-              {{ facet._id }}
-            </th>
-            <td *ngFor="let criteria of facet.criteria">
-              <input type="text" value="{{ criteria.content }}"/>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div>
-
   </form>
+</div>
+
+<div *ngIf="isFacetTableVisible">
+  <app-facets  [rubric]="rubric" [topScore]="topScoreNumber" [bottomScore]="bottomScoreNumber"></app-facets>
+<!--  <app-facets [rubric]="rubric"></app-facets>-->
 </div>
 
 

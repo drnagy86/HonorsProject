@@ -1,4 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {RubricDataService} from "../rubric-data.service";
+import {Criteria, Facets, Rubric} from "../classes/rubric";
+import {Component, OnInit, Input} from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormBuilder,
+  Form,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+  FormArray
+} from "@angular/forms";
+import {Validators} from "@angular/forms";
+
 
 @Component({
   selector: 'app-facets',
@@ -7,9 +21,74 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FacetsComponent implements OnInit {
 
-  constructor() { }
+  public scoreArray: number[] = [];
+  @Input() rubric!: Rubric;
+  @Input() topScore!: number;
+  @Input() bottomScore!: number;
 
-  ngOnInit(): void {
+  facetForm = this.fb.group({
+    facetFormName: ['', Validators.required],
+    // criteriaInputs : this.fb.array([
+    //   this.fb.control('')
+    // ])
+  });
+
+  // get criteriaInputs(){
+  //   return this.facetForm.get('criteriaInputs') as FormArray;
+  // }
+  //
+  // addCriteriaInput(){
+  //   this.criteriaInputs.push(this.fb.control(""));
+  // }
+
+  constructor(
+    private rubricDataService: RubricDataService,
+    private fb : FormBuilder
+  ) {
+
   }
 
+  setUpTable() {
+    this.scoreArray = [];
+    for (let i = this.bottomScore; i < this.topScore + 1; i++) {
+      this.scoreArray.push(i);
+    }
+    // for (let i = this.bottomScore; i < this.topScore; i++) {
+    //   this.addCriteriaInput();
+    // }
+  }
+
+  ngOnInit(): void {
+
+    this.setUpTable();
+
+    // let blankCriteria: Criteria = new Criteria('', '', 0, new Date(Date.now()), new Date(Date.now()), true);
+    // let blankCriteriaList: Criteria[] = [];
+    //
+    // for (let i = this.bottomScore; i < this.topScore + 1; i++) {
+    //
+    //   blankCriteriaList.push(new Criteria('test', i + " Test", i, new Date(Date.now()), new Date(Date.now()), true))
+    // }
+    // let blankFacet: Facets = new Facets('test', '', new Date(Date.now()), new Date(Date.now()), true, blankCriteriaList);
+    // this.rubric.facets.push(blankFacet);
+
+    for (let i = this.bottomScore; i < this.topScore; i++) {
+      this.facetForm.addControl(String(i),new FormControl('', Validators.required));
+    }
+
+  }
+
+  addFacet() {
+
+    // for (let criteria of this.criteriaInputs.controls) {
+    //   console.log(criteria);
+    // }
+
+    console.log(this.facetForm.get('1'));
+    console.log(this.facetForm.get('2'));
+    console.log(this.facetForm.get('3'));
+    console.log(this.facetForm.get('4'));
+
+
+  }
 }
