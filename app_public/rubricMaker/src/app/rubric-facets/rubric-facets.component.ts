@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RubricDataService} from "../rubric-data.service";
-import {Rubric, Facets, Criteria} from "../classes/rubric";
+import {Rubric, Facet, Criteria} from "../classes/rubric";
 
 @Component({
   selector: 'app-rubric-facets',
@@ -23,7 +23,7 @@ export class RubricFacetsComponent implements OnInit {
   private findScoreRange(rubricScore : Rubric): number[] {
     const result : number[] = [];
 
-    const facetOne : Facets = rubricScore.facets[0];
+    const facetOne : Facet = rubricScore.facets[0];
     for (let criterion of facetOne.criteria) {
       result.push(criterion.score)
     }

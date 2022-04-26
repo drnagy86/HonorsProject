@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {Rubric, Subject, Facets, Criteria} from "../classes/rubric";
+import {Rubric, Subject, Facet, Criteria} from "../classes/rubric";
 import {RubricDataService} from "../rubric-data.service";
 
 @Component({

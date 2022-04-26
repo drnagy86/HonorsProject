@@ -8,7 +8,7 @@ const criteriaReadAllForRubric = (req, res) => {
     Rub
         .findById(req.params.rubricid)
         .select('facets')
-        .exec((err, rubric) =>{
+        .exec((err, rubric) => {
             if (!rubric) {
                 return res
                     .status(404)
@@ -21,28 +21,28 @@ const criteriaReadAllForRubric = (req, res) => {
                     .json(err);
             }
             // found the rubric
-            if(rubric.facets && rubric.facets.length > 0){
-                const facet = rubric.facets.find( f => f._id == req.params.facetid);
+            if (rubric.facets && rubric.facets.length > 0) {
+                const facet = rubric.facets.find(f => f._id == req.params.facetid);
                 if (!facet) {
                     return res
                         .status(400)
                         .json({
-                            "message" : "facet not found"
+                            "message": "facet not found"
                         });
                 } else {
-                    if(facet.criteria && facet.criteria.length > 0){
+                    if (facet.criteria && facet.criteria.length > 0) {
                         const criteria = facet.criteria;
                         if (!criteria) {
                             return res
                                 .status(400)
                                 .json({
-                                    "message" : "criteria not found"
+                                    "message": "criteria not found"
                                 });
                         } else {
                             const response = {
-                                rubric : {
-                                    name : rubric.name,
-                                    id : req.params.rubricid,
+                                rubric: {
+                                    name: rubric.name,
+                                    id: req.params.rubricid,
                                     facet: req.params.facetid
                                 },
                                 criteria
@@ -55,32 +55,30 @@ const criteriaReadAllForRubric = (req, res) => {
                         return res
                             .status(404)
                             .json({
-                                "message" : "no criteria found"
+                                "message": "no criteria found"
                             });
                     }
                 }
-            }
-            else {
+            } else {
                 return res
                     .status(404)
                     .json({
-                        "message" : "no facets found"
+                        "message": "no facets found"
                     });
             }
         });
 }
-const criteriaCreateOne= (req, res)  => {
-    return res
-        .status(200)
-        .json({
-            "message": "worked"
-        });
-}
-const criteriaReadOne= (req, res)  => {
+const criteriaCreateOne = (req, res) => {
+    // return res
+    //     .status(200)
+    //     .json({
+    //         "message": "worked"
+    //     });
+
     Rub
         .findById(req.params.rubricid)
         .select('facets')
-        .exec((err, rubric) =>{
+        .exec((err, rubric) => {
             if (!rubric) {
                 return res
                     .status(404)
@@ -93,30 +91,86 @@ const criteriaReadOne= (req, res)  => {
                     .json(err);
             }
             // found the rubric
-            if(rubric.facets && rubric.facets.length > 0){
-                const facet = rubric.facets.find( f => f._id == req.params.facetid);
+            if (rubric.facets && rubric.facets.length > 0) {
+                const facet = rubric.facets.find(f => f._id == req.params.facetid);
                 if (!facet) {
                     return res
                         .status(400)
                         .json({
-                            "message" : "facet not found"
+                            "message": "facet not found"
                         });
                 } else {
-                    if(facet.criteria && facet.criteria.length > 0){
+                    const {content, score} = req.body;
+                    facet.criteria.push({
+                            content,
+                            score
+                        }
+                    );
+
+                    rubric.save(err => {
+                        if (err) {
+                            return res
+                                .status(404)
+                                .json(err);
+                        } else {
+                            const thisCriteria = facet.criteria.slice(-1).pop();
+                            res
+                                .status(201)
+                                .json(thisCriteria);
+                        }
+                    });
+                }
+            } else {
+                return res
+                    .status(404)
+                    .json({
+                        "message": "no facets found"
+                    });
+            }
+        });
+
+}
+const criteriaReadOne = (req, res) => {
+    Rub
+        .findById(req.params.rubricid)
+        .select('facets')
+        .exec((err, rubric) => {
+            if (!rubric) {
+                return res
+                    .status(404)
+                    .json({
+                        "message": "rubric not found"
+                    });
+            } else if (err) {
+                return res
+                    .status(400)
+                    .json(err);
+            }
+            // found the rubric
+            if (rubric.facets && rubric.facets.length > 0) {
+                const facet = rubric.facets.find(f => f._id == req.params.facetid);
+                if (!facet) {
+                    return res
+                        .status(400)
+                        .json({
+                            "message": "facet not found"
+                        });
+                } else {
+                    if (facet.criteria && facet.criteria.length > 0) {
                         const criteria = facet.criteria;
                         if (!criteria) {
                             return res
                                 .status(400)
                                 .json({
-                                    "message" : "criteria not found"
+                                    "message": "criteria not found"
                                 });
                         } else {
                             const thisCriteria = criteria.find(c => c._id == req.params.criteriaid);
                             const response = {
-                                rubric : {
-                                    name : rubric.name,
-                                    id : req.params.rubricid,
-                                    facet : req.params.facetid,
+                                rubric: {
+                                    name: rubric.name,
+                                    id: req.params.rubricid,
+                                    facet: req.params.facetid,
                                 },
                                 thisCriteria
                             };
@@ -128,26 +182,25 @@ const criteriaReadOne= (req, res)  => {
                         return res
                             .status(404)
                             .json({
-                                "message" : "no criteria found"
+                                "message": "no criteria found"
                             });
                     }
                 }
-            }
-            else {
+            } else {
                 return res
                     .status(404)
                     .json({
-                        "message" : "no facets found"
+                        "message": "no facets found"
                     });
             }
         });
 
 }
-const criteriaUpdateOne= (req, res)  => {
+const criteriaUpdateOne = (req, res) => {
     Rub
         .findById(req.params.rubricid)
         .select('facets')
-        .exec((err, rubric) =>{
+        .exec((err, rubric) => {
             if (!rubric) {
                 return res
                     .status(404)
@@ -160,33 +213,32 @@ const criteriaUpdateOne= (req, res)  => {
                     .json(err);
             }
             // found the rubric
-            if(rubric.facets && rubric.facets.length > 0){
-                const facet = rubric.facets.find( f => f._id == req.params.facetid);
+            if (rubric.facets && rubric.facets.length > 0) {
+                const facet = rubric.facets.find(f => f._id == req.params.facetid);
                 if (!facet) {
                     return res
                         .status(400)
                         .json({
-                            "message" : "facet not found"
+                            "message": "facet not found"
                         });
                 } else {
-                    if(facet.criteria && facet.criteria.length > 0){
+                    if (facet.criteria && facet.criteria.length > 0) {
                         const criteria = facet.criteria;
                         if (!criteria) {
                             return res
                                 .status(400)
                                 .json({
-                                    "message" : "criteria not found"
+                                    "message": "criteria not found"
                                 });
                         } else {
                             const thisCriteria = criteria.find(c => c._id == req.params.criteriaid);
-                            if (!thisCriteria){
+                            if (!thisCriteria) {
                                 res
                                     .status(404)
                                     .json({
-                                        "message" : "Criteria not found"
+                                        "message": "Criteria not found"
                                     });
-                            }
-                            else {
+                            } else {
                                 const {
                                     old_content,
                                     new_content,
@@ -197,13 +249,13 @@ const criteriaUpdateOne= (req, res)  => {
                                 // console.log(old_content === thisCriteria.content);
                                 // console.log(old_score == thisCriteria.score);
 
-                                if (old_content === thisCriteria.content && old_score == thisCriteria.score){
+                                if (old_content === thisCriteria.content && old_score == thisCriteria.score) {
                                     thisCriteria.content = new_content;
                                     thisCriteria.score = new_score;
                                     thisCriteria.dateUpdated = Date.now();
 
-                                    rubric.save((err, rubric) =>{
-                                        if(err){
+                                    rubric.save((err, rubric) => {
+                                        if (err) {
                                             res
                                                 .status(404)
                                                 .json(err);
@@ -218,7 +270,7 @@ const criteriaUpdateOne= (req, res)  => {
                                     res
                                         .status(404)
                                         .json({
-                                            "message" : "Unable to update because record has changed since starting edit"
+                                            "message": "Unable to update because record has changed since starting edit"
                                         });
                                 }
                             }
@@ -228,25 +280,24 @@ const criteriaUpdateOne= (req, res)  => {
                         return res
                             .status(404)
                             .json({
-                                "message" : "no criteria found"
+                                "message": "no criteria found"
                             });
                     }
                 }
-            }
-            else {
+            } else {
                 return res
                     .status(404)
                     .json({
-                        "message" : "no facets found"
+                        "message": "no facets found"
                     });
             }
         });
 }
-const criteriaDeleteOne= (req, res)  => {
+const criteriaDeleteOne = (req, res) => {
     Rub
         .findById(req.params.rubricid)
         .select('facets')
-        .exec((err, rubric) =>{
+        .exec((err, rubric) => {
             if (!rubric) {
                 return res
                     .status(404)
@@ -259,26 +310,26 @@ const criteriaDeleteOne= (req, res)  => {
                     .json(err);
             }
             // found the rubric
-            if(rubric.facets && rubric.facets.length > 0){
-                const facet = rubric.facets.find( f => f._id == req.params.facetid);
+            if (rubric.facets && rubric.facets.length > 0) {
+                const facet = rubric.facets.find(f => f._id == req.params.facetid);
                 if (!facet) {
                     return res
                         .status(400)
                         .json({
-                            "message" : "facet not found"
+                            "message": "facet not found"
                         });
                 } else {
-                    if(facet.criteria && facet.criteria.length > 0){
+                    if (facet.criteria && facet.criteria.length > 0) {
                         const criteria = facet.criteria;
                         if (!criteria) {
                             return res
                                 .status(400)
                                 .json({
-                                    "message" : "criteria not found"
+                                    "message": "criteria not found"
                                 });
                         } else {
-                            if(facet.criteria && facet.criteria.length > 0){
-                                if (!facet.criteria.id(req.params.criteriaid)){
+                            if (facet.criteria && facet.criteria.length > 0) {
+                                if (!facet.criteria.id(req.params.criteriaid)) {
                                     return res
                                         .status(404)
                                         .json({'message': 'criteria not found'});
@@ -300,7 +351,7 @@ const criteriaDeleteOne= (req, res)  => {
                                 return res
                                     .status(404)
                                     .json({
-                                        "message" : "no criteria found"
+                                        "message": "no criteria found"
                                     });
                             }
                         }
@@ -308,22 +359,20 @@ const criteriaDeleteOne= (req, res)  => {
                         return res
                             .status(404)
                             .json({
-                                "message" : "no criteria found"
+                                "message": "no criteria found"
                             });
                     }
                 }
-            }
-            else {
+            } else {
                 return res
                     .status(404)
                     .json({
-                        "message" : "no facets found"
+                        "message": "no facets found"
                     });
             }
         });
 
 }
-
 
 
 module.exports = {

@@ -17,7 +17,7 @@ export class Criteria {
 }
 
 
-export class Facets {
+export class Facet {
   constructor(
     _id: string,
     description: string,
@@ -62,7 +62,7 @@ export class Subject {
   active: boolean;
 }
 export class Rubric {
-  constructor(id: string, name: string, description: string, dateCreated: Date, dateUpdated: Date, rubricCreator: string, active: boolean, subjects: Subject[], facets: Facets[]) {
+  constructor(id: string, name: string, description: string, dateCreated: Date, dateUpdated: Date, rubricCreator: string, active: boolean, subjects: Subject[], facets: Facet[]) {
     this._id = id;
     this.name = name;
     this.description = description;
@@ -81,5 +81,5 @@ export class Rubric {
   rubricCreator: string;
   active: boolean;
   subjects: Subject[];
-  facets: Facets[];
+  facets: Facet[];
 }

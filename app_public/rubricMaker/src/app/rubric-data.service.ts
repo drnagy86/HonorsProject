@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders} from "@angular/common/http";
-import {Rubric, Subject} from "./classes/rubric";
+import {Criteria, Facet, Rubric, Subject} from "./classes/rubric";
 import {lastValueFrom} from "rxjs";
 import {environment} from "../environments/environment";
 import {User} from "./classes/user";
@@ -72,6 +72,22 @@ export class RubricDataService {
     //console.log(formData);
 
     return lastValueFrom(this.http.post(url, formData))
+      .then(response => response as any)
+      .catch(this.handleError);
+  }
+
+  public addNewFacet(rubricId: string, facetToAdd: Facet) : Promise<Facet> {
+    const url: string = `${this.apiBaseUrl}/rubrics/${rubricId}/facets/`;
+
+    return lastValueFrom(this.http.post(url, facetToAdd))
+      .then(response => response as any)
+      .catch(this.handleError);
+  }
+
+  public addNewCriteria(rubricId: string, facetID: string, criteria: Criteria): Promise<Criteria> {
+    const url: string = `${this.apiBaseUrl}/rubrics/${rubricId}/facets/${facetID}/Criteria`;
+
+    return lastValueFrom(this.http.post(url, criteria))
       .then(response => response as any)
       .catch(this.handleError);
   }

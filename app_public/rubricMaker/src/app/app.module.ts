@@ -22,6 +22,7 @@ import { LoginComponent } from './login/login.component';
 import { RubricFacetsComponent } from './rubric-facets/rubric-facets.component';
 import { CreateRubricComponent } from './create-rubric/create-rubric.component';
 import { FacetsComponent } from './facets/facets.component';
+import { Facet2Component } from './facet2/facet2.component';
 
 
 
@@ -40,7 +41,8 @@ import { FacetsComponent } from './facets/facets.component';
     LoginComponent,
     RubricFacetsComponent,
     CreateRubricComponent,
-    FacetsComponent
+    FacetsComponent,
+    Facet2Component
   ],
   imports: [
     BrowserModule,

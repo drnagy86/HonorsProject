@@ -6,9 +6,9 @@ db = connect( "mongodb://localhost/rubricDB")
 db.users.insertOne(
 	{
 		_id : ObjectId("62337982dd76768c63cb9474"),
-		email : 'test@company.com',
-		givenName : 'Tess',
-		familyName : 'Data',
+		email : 'derrick@company.com',
+		givenName : 'Derrick',
+		familyName : 'Nagy',
 		salt : 'b847ed51bd76f617ccefa3cad03072d6',
 		hash : '8847edc1b1b9b1cff9d6fc417588a3f6fac497b3bbb7584b6f137d1591a10f5221037ea4d585896e9b57c22ebb09cba2368a73e78f99a355194bee1c4e9605b9'
 	}

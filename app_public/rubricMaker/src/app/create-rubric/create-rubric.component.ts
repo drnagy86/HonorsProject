@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {RubricDataService} from "../rubric-data.service";
-import {Criteria, Facets, Rubric, Subject} from "../classes/rubric";
+import {Criteria, Facet, Rubric, Subject} from "../classes/rubric";
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import {
   FormControl,
@@ -144,6 +144,7 @@ export class CreateRubricComponent implements OnInit {
         this.rubricIsCreated = true;
       } catch (e){
         console.log(e);
+        // send message to user
       }
       this.btnCreate = (!this.rubricIsCreated)?"Create": "Edit"
     }

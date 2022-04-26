@@ -1,0 +1,98 @@
+<form [formGroup]="facetForm">
+  <div formArrayName="facets">
+    <div class="row">
+      <h3>Start Adding Facets</h3>
+      <p>Add as many facets to your rubric as you would like.</p>
+    </div>
+    <div class="d-flex">
+      <button type="button" class="btn btn-outline-dark me-auto" (click)="addFacet()">Add Facet</button>
+      <input [disabled]="!facetForm.valid" type="submit" class="btn btn-primary ms-auto" (click)="onSubmit()" value="Finish and Create">
+    </div>
+    <div *ngFor="let facet of facetsFormArray().controls; let facetIndex = index">
+      <div [formGroupName]="facetIndex" class="card mt-2">
+        <div class="card-header">
+          <div class="d-flex">
+            <h4 class="me-auto"> Create a Facet </h4>
+            <button (click)="removeFacet(facetIndex)" class="ms-auto btn btn-danger" type="button">Remove</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Fill out information about the facet.</h5>
+          <div class="card-text mb-3">
+            Describe what will be evaluated. Student Understanding? Skill? Process?
+          </div>
+          <div class="form-group col-md-4">
+            <label for="facetName-{{facetIndex}}" class="form-label">Facet Name:</label>
+            <input type="text" class="form-control" id="facetName-{{facetIndex}}" formControlName="facetName" required>
+            <div class="row-height-30">
+              <div
+                *ngIf="facet.get('facetName')?.dirty || facet.get('facetName')?.touched">
+                <div *ngIf="facet.get('facetName')?.errors?.['required']">
+                  <label class="text-danger">A name is required.</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md">
+              <label class="form-label">Description:</label>
+              <textarea class="form-control" formControlName="facetDescription" rows="2"></textarea>
+              <div class="row-height-30">
+                <div
+                  *ngIf="facet.get('facetDescription')?.dirty || facet.get('facetDescription')?.touched">
+                  <div *ngIf="facet.get('facetDescription')?.errors?.['required']">
+                    <label class="text-danger">A name is required.</label>
+                  </div>
+                  <div *ngIf="facet.get('facetDescription')?.errors?.['maxLength']">
+                    <label class="text-danger">A name is required.</label>
+                  </div>
+                  <div *ngIf="facet.get('facetDescription')?.errors?.['minLength']">
+                    <label class="text-danger">A name is required.</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div formArrayName="criteria">
+            <!--          <button (click)="addCriteria(facetIndex)" class="btn btn-primary">Add Criteria</button>-->
+            <!--          <button (click)="addAllCriteriaForFacet(facetIndex)" class="btn btn-primary">Add Criteria</button>-->
+            <div class="d-flex">
+              <div class="card m-2" *ngFor="let crit of facetCriteria(facetIndex).controls; let critIndex = index">
+                <div [formGroupName]="critIndex">
+                  <div class="card-header d-flex">
+                    <label class="me-auto form-text" [textContent]="scoreArray[critIndex]"
+                           id="facet-crit-{{facetIndex}}-{{critIndex}}" formControlName="score"></label>
+                    <!--                  <button class="btn btn-danger" (click)="removeCriteria(facetIndex, critIndex)">X</button>-->
+                  </div>
+                  <div class="card-text">
+                    <input type="hidden" formControlName="criteriaID">
+                    <div class="form-group">
+                    <textarea
+                      placeholder='Add description of the criteria here, e.g. "Student showed an understanding to this degree by doing..."'
+                      formControlName="content"
+                      rows="8"
+                      class="form-control"
+                    ></textarea>
+                      <div class="row-height-30">
+                        <div
+                          *ngIf="crit.get('content')?.dirty || crit.get('content')?.touched">
+                          <div *ngIf="crit.get('content')?.errors?.['required']">
+                            <label class="text-danger">A description is required.</label>
+                          </div>
+                          <div *ngIf="crit.get('content')?.errors?.['maxLength']">
+                            <label class="text-danger">Max 250 characters.</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+

@@ -4,7 +4,6 @@ const subjectsSchema = new mongoose.Schema({
     subject_id : {
         type : String,
         required : true,
-        unique: true,
         index : true,
         dropDups: true
     },
@@ -31,12 +30,12 @@ const subjectsSchema = new mongoose.Schema({
 const criteriaSchema = new mongoose.Schema({
     _id : {
         type : mongoose.Schema.Types.ObjectId,
-        required : true,
-        unique : true
     },
     content : {
         type : String,
-        required : true
+        required : true,
+        maxLength : 250
+
     },
     score : {
         type : Number,
@@ -60,33 +59,35 @@ const criteriaSchema = new mongoose.Schema({
     }
 });
 
-const facetTypeSchema = new mongoose.Schema({
-    _id : {
-        type : String,
-        required : true,
-        unique : true,
-        index : true
-    },
-    description : {
-        type : String,
-        required : true
-    },
-    active : {
-        type: Boolean,
-        'default': true
-    }
-});
+// const facetTypeSchema = new mongoose.Schema({
+//     _id : {
+//         type : String,
+//         required : true,
+//         unique : true,
+//         index : true
+//     },
+//     description : {
+//         type : String,
+//         required : true
+//     },
+//     active : {
+//         type: Boolean,
+//         'default': true
+//     }
+// });
 
 const facetsSchema = new mongoose.Schema({
     _id : {
         type : String,
         required : true,
         unique : true,
-        index : true
+        index : true,
+        maxLength : 100
     },
     description : {
         type : String,
-        required : true
+        required : true,
+        maxLength : 500
     },
     dateCreated : {
         type : Date,
@@ -102,13 +103,13 @@ const facetsSchema = new mongoose.Schema({
         type: Boolean,
         'default': true
     },
-    facetType : [{
-        type : facetTypeSchema,
-        ref: 'FacetType',
-        required : false,
-        unique : false
-
-    }],
+    // facetType : [{
+    //     type : facetTypeSchema,
+    //     ref: 'FacetType',
+    //     required : false,
+    //     unique : false
+    //
+    // }],
     criteria : [{
         type : criteriaSchema,
         ref: 'Criteria',

@@ -66,8 +66,8 @@
           <h3 class="mt-2">Subjects</h3>
           <p>Add a subject or multiple subjects for your rubric.</p>
           <div class="d-flex">
-            <button class="btn btn-outline-dark m-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">+ Add Subject</button>
-            <button *ngFor="let subject of rubric.subjects"
+            <button type="button" class="btn btn-outline-dark m-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">+ Add Subject</button>
+            <button type="button" *ngFor="let subject of rubric.subjects"
                     class="btn btn-sm btn-dark m-2"
                     data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ subject.description}}">
               {{subject.subject_id}}
@@ -182,7 +182,7 @@
           <div class="modal-footer">
             <div class="form-group row m-2">
               <div class="col-12">
-                <button (click)="addSubject()" class="btn btn-primary m-1" data-bs-dismiss="modal">Add Subject</button>
+                <button (click)="addSubject()" type="button" class="btn btn-primary m-1" data-bs-dismiss="modal">Add Subject</button>
                 <button (click)="resetSubjectForm()" type="button" class="btn btn-danger m-1" data-bs-dismiss="modal">Cancel</button>
               </div>
             </div>
@@ -194,8 +194,14 @@
   </form>
 </div>
 
+
+<div class="row">
+  <app-facet2 [rubric]="rubric" [topScore]="topScoreNumber" [bottomScore]="bottomScoreNumber"></app-facet2>
+</div>
+
 <div *ngIf="isFacetTableVisible">
-  <app-facets  [rubric]="rubric" [topScore]="topScoreNumber" [bottomScore]="bottomScoreNumber"></app-facets>
+<!--  <app-facets  [rubric]="rubric" [topScore]="topScoreNumber" [bottomScore]="bottomScoreNumber"></app-facets>-->
+<!--  <app-facet2 [rubric]="rubric" [topScore]="topScoreNumber" [bottomScore]="bottomScoreNumber"></app-facet2>-->
 <!--  <app-facets [rubric]="rubric"></app-facets>-->
 </div>
 

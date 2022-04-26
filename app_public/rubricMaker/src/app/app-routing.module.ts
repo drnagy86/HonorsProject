@@ -7,6 +7,7 @@ import {RegisterComponent} from "./register/register.component";
 import {LoginComponent} from "./login/login.component";
 import {CreateRubricComponent} from "./create-rubric/create-rubric.component";
 import {FacetsComponent} from "./facets/facets.component";
+import {Facet2Component} from "./facet2/facet2.component";
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'facets',
     component: FacetsComponent
+  },
+  {
+    path: 'facets2',
+    component: Facet2Component
   }
 ];
 
