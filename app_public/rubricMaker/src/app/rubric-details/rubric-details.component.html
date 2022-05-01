@@ -1,143 +1,178 @@
 <!--rubric description-->
+
 <div class="row">
-  <div class="col-12 col-md-8 mx-auto my-1">
-    <div class="error"></div>
-    <div class="m-2 p-3">
-      <div class="row clearfix">
-        <div class="clearfix col-2">
-          <div class="float-end"><label>Rubric Name:</label></div>
-        </div>
-        <div class="clearfix col">
-          <div class="float-start">
-            <p>{{rubric.name}}</p>
-          </div>
-        </div>
+  <h2 class="card-header">{{rubric.name}}</h2>
+  <div class="card">
+
+    <div class="card-body">
+      <div class="d-inline-flex card-subtitle mt-2">
+        <p class="me-2 text-black-50">Created:</p>
+        <p class="me-2 text-black-50">{{ rubric.dateCreated | date }}</p>
+        <p class="me-2 text-black-50">|</p>
+        <p class="me-2 text-black-50">Updated:</p>
+        <p class="me-2 text-black-50">{{ rubric.dateUpdated | date }}</p>
       </div>
-      <div class="row">
-        <div class="col-2 clearfix">
-          <div class="float-end"><label>Description:</label></div>
-        </div>
-        <div class="col clearfix">
-          <div class="float-start">
-            <p [innerHTML]="rubric.description | htmlLineBreaks"></p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-2 clearfix">
-          <div class="float-end"><label>Created On:</label></div>
-        </div>
-        <div class="col clearfix">
-          <div class="float-start">
-            <p>{{ rubric.dateCreated | date }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-2 clearfix">
-          <div class="float-end"><label>Last Updated:</label></div>
-        </div>
-        <div class="col clearfix">
-          <div class="float-start">
-            <p>{{ rubric.dateUpdated | date }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-2 clearfix">
-          <div class="float-end"><label>Creator:</label></div>
-        </div>
-        <div class="col clearfix">
-          <div class="float-start">
-            <p>{{ rubric.rubricCreator }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-2 clearfix">
-          <div class="float-end"><label>Subjects:</label></div>
-        </div>
-        <div class="col clearfix">
-          <button
-            *ngFor="let subject of rubric.subjects"
-            class="btn btn-sm btn-dark m-1"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ subject.description}}"
-          >
-            {{subject.subject_id}}
-          </button>
-          <button (click)="subjectFormVisible=true" class="btn btn-sm btn-outline-dark m-1">
-            + Add
-          </button>
-        </div>
-      </div>
+      <h6 class="card-text">Description:</h6>
+      <p class="card-text" [innerHTML]="rubric.description | htmlLineBreaks"></p>
+
+      <h6 class="card-text">Subjects:</h6>
+      <button
+        *ngFor="let subject of rubric.subjects"
+        class="btn btn-sm btn-dark m-1"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ subject.description}}"
+      >
+        {{subject.subject_id}}
+      </button>
+
+
+    </div>
+    <div class="row card-footer">
+            <span class="col-2">
+              <a routerLink="/edit-rubric/{{rubric._id}}">Edit</a>
+            </span>
     </div>
   </div>
 </div>
 
 
+<!--<div class="row">-->
+<!--  <div class="col-12 col-md-8 mx-auto my-1">-->
+<!--    <div class="error"></div>-->
+<!--    <div class="m-2 p-3">-->
+<!--      <div class="row clearfix">-->
+<!--        <div class="clearfix col-2">-->
+<!--          <div class="float-end"><label>Rubric Name:</label></div>-->
+<!--        </div>-->
+<!--        <div class="clearfix col">-->
+<!--          <div class="float-start">-->
+<!--            <p>{{rubric.name}}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="row">-->
+<!--        <div class="col-2 clearfix">-->
+<!--          <div class="float-end"><label>Description:</label></div>-->
+<!--        </div>-->
+<!--        <div class="col clearfix">-->
+<!--          <div class="float-start">-->
+<!--            <p [innerHTML]="rubric.description | htmlLineBreaks"></p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="row">-->
+<!--        <div class="col-2 clearfix">-->
+<!--          <div class="float-end"><label>Created On:</label></div>-->
+<!--        </div>-->
+<!--        <div class="col clearfix">-->
+<!--          <div class="float-start">-->
+<!--            <p>{{ rubric.dateCreated | date }}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="row">-->
+<!--        <div class="col-2 clearfix">-->
+<!--          <div class="float-end"><label>Last Updated:</label></div>-->
+<!--        </div>-->
+<!--        <div class="col clearfix">-->
+<!--          <div class="float-start">-->
+<!--            <p>{{ rubric.dateUpdated | date }}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="row">-->
+<!--        <div class="col-2 clearfix">-->
+<!--          <div class="float-end"><label>Creator:</label></div>-->
+<!--        </div>-->
+<!--        <div class="col clearfix">-->
+<!--          <div class="float-start">-->
+<!--            <p>{{ rubric.rubricCreator }}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="row">-->
+<!--        <div class="col-2 clearfix">-->
+<!--          <div class="float-end"><label>Subjects:</label></div>-->
+<!--        </div>-->
+<!--        <div class="col clearfix">-->
+<!--          <button-->
+<!--            *ngFor="let subject of rubric.subjects"-->
+<!--            class="btn btn-sm btn-dark m-1"-->
+<!--            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ subject.description}}"-->
+<!--          >-->
+<!--            {{subject.subject_id}}-->
+<!--          </button>-->
+<!--&lt;!&ndash;          <button (click)="subjectFormVisible=true" class="btn btn-sm btn-outline-dark m-1">&ndash;&gt;-->
+<!--&lt;!&ndash;            + Add&ndash;&gt;-->
+<!--&lt;!&ndash;          </button>&ndash;&gt;-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
 
 <!--add subject-->
-<div class="row">
-  <div class="col-12 col-md-8 mx-auto my-1" *ngIf="subjectFormVisible">
-    <form (ngSubmit)="onAddSubjectSubmit()">
-      <fieldset class="mt-4">
-        <legend>Add a Subject</legend>
-          <fieldset class="form-group">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input
-                  type="radio" class="form-check-input"
-                  name="radSubject" id="optChooseSubject" value="optChooseSubject"
-                  checked =""
-                  (change)="addNewSubjectFormVisible = false"
-                >
-                Choose a subject
-              </label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input
-                  type="radio" class="form-check-input"
-                  name="radSubject" id="optNewSubject" value="optNewSubject"
-                  (change)="addNewSubjectFormVisible = true"
-                >
-                Create a new subject
-              </label>
-            </div>
-          </fieldset>
-        <div class="form-group" *ngIf="addNewSubjectFormVisible === false" >
-          <label for="selectSubject" class="form-label mt-4">Subjects</label>
-          <select class="form-select" id="selectSubject">
-            <option></option>
-            <option>ESL</option>
-            <option>Writing</option>
-            <option>Reading</option>
-          </select>
-        </div>
-        <div *ngIf="subjectFormError" class="alert alert-danger" role="alert">
-          {{ subjectFormError}}
-        </div>
+<!--<div class="row">-->
+<!--  <div class="col-12 col-md-8 mx-auto my-1" *ngIf="subjectFormVisible">-->
+<!--    <form (ngSubmit)="onAddSubjectSubmit()">-->
+<!--      <fieldset class="mt-4">-->
+<!--        <legend>Add a Subject</legend>-->
+<!--          <fieldset class="form-group">-->
+<!--            <div class="form-check">-->
+<!--              <label class="form-check-label">-->
+<!--                <input-->
+<!--                  type="radio" class="form-check-input"-->
+<!--                  name="radSubject" id="optChooseSubject" value="optChooseSubject"-->
+<!--                  checked =""-->
+<!--                  (change)="addNewSubjectFormVisible = false"-->
+<!--                >-->
+<!--                Choose a subject-->
+<!--              </label>-->
+<!--            </div>-->
+<!--            <div class="form-check">-->
+<!--              <label class="form-check-label">-->
+<!--                <input-->
+<!--                  type="radio" class="form-check-input"-->
+<!--                  name="radSubject" id="optNewSubject" value="optNewSubject"-->
+<!--                  (change)="addNewSubjectFormVisible = true"-->
+<!--                >-->
+<!--                Create a new subject-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </fieldset>-->
+<!--        <div class="form-group" *ngIf="addNewSubjectFormVisible === false" >-->
+<!--          <label for="selectSubject" class="form-label mt-4">Subjects</label>-->
+<!--          <select class="form-select" id="selectSubject">-->
+<!--            <option></option>-->
+<!--            <option>ESL</option>-->
+<!--            <option>Writing</option>-->
+<!--            <option>Reading</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--        <div *ngIf="subjectFormError" class="alert alert-danger" role="alert">-->
+<!--          {{ subjectFormError}}-->
+<!--        </div>-->
 
-        <div *ngIf="addNewSubjectFormVisible === true">
-          <div class="form-group">
-            <label for="txtSubjectName" class="form-label mt-4">Subject Name</label>
-            <input [(ngModel)]="newSubject.subject_id" name="subject_id" type="text" class="form-control" id="txtSubjectName" placeholder="Enter Subject" required>
-          </div>
-          <div class="form-group">
-            <label for="txtAreaSubjectDescription" class="form-label mt-4">Subject Description</label>
-            <textarea [(ngModel)]="newSubject.description" name="description" class="form-control" id="txtAreaSubjectDescription" rows="3"></textarea>
-          </div>
-        </div>
+<!--        <div *ngIf="addNewSubjectFormVisible === true">-->
+<!--          <div class="form-group">-->
+<!--            <label for="txtSubjectName" class="form-label mt-4">Subject Name</label>-->
+<!--            <input [(ngModel)]="newSubject.subject_id" name="subject_id" type="text" class="form-control" id="txtSubjectName" placeholder="Enter Subject" required>-->
+<!--          </div>-->
+<!--          <div class="form-group">-->
+<!--            <label for="txtAreaSubjectDescription" class="form-label mt-4">Subject Description</label>-->
+<!--            <textarea [(ngModel)]="newSubject.description" name="description" class="form-control" id="txtAreaSubjectDescription" rows="3"></textarea>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-group row m-2">
-          <div class="col-12">
-            <button type="submit" class="btn btn-primary m-1">Add Subject</button>
-            <button (click)="resetSubjectForm()" type="button" class="btn btn-default m-1">Cancel</button>
-          </div>
-        </div>
-      </fieldset>
-    </form>
-  </div>
+<!--        <div class="form-group row m-2">-->
+<!--          <div class="col-12">-->
+<!--            <button type="submit" class="btn btn-primary m-1">Add Subject</button>-->
+<!--            <button (click)="resetSubjectForm()" type="button" class="btn btn-default m-1">Cancel</button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </fieldset>-->
+<!--    </form>-->
+<!--  </div>-->
 
-</div>
+<!--</div>-->
 

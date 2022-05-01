@@ -6,7 +6,7 @@ const User = mongoose.model('User');
 //     The findById() method doesn’t return a location.
 //     The findById() method returns an error.
 
-const rubricsList = (req,res) => {
+const rubricsList = (req, res) => {
 
     Rub
         .find()
@@ -27,29 +27,29 @@ const rubricsList = (req,res) => {
                 .json(rubrics);
         })
 };
-const rubricCreate = (req,res) => {
+const rubricCreate = (req, res) => {
 
     //res = getRubricCreator(req, res);
     //console.log(res);
-    if (res.status === '404'){
+    if (res.status === '404') {
         return res;
-    } else if (!req.body.name || !req.body.description){
+    } else if (!req.body.name || !req.body.description) {
         return res
             .status(400)
             .json({
-                "message" : "Missing name or description"
+                "message": "Missing name or description"
             });
     } else {
 
         Rub
             .create({
-                    "name" : req.body.name,
+                    "name": req.body.name,
                     "description": req.body.description,
                     // "rubricCreator" : req.payload.email,
-                    "rubricCreator" : req.body.rubricCreator,
+                    "rubricCreator": req.body.rubricCreator,
                 }
                 , (err, rubric) => {
-                    if (err){
+                    if (err) {
                         console.log(rubric);
                         return res
                             .status(400)
@@ -63,10 +63,10 @@ const rubricCreate = (req,res) => {
     }
 
 };
-const rubricReadOne = (req,res) => {
+const rubricReadOne = (req, res) => {
     Rub
         .findById(req.params.rubricid)
-        .exec((err, rubric) =>{
+        .exec((err, rubric) => {
             //The findById() method doesn’t return a location.
             if (!rubric) {
                 return res
@@ -86,26 +86,10 @@ const rubricReadOne = (req,res) => {
         });
 
 };
-const rubricUpdateOne = (req,res) => {
-
-    if (!req.params.rubricid){
-        return res
-            .status(404)
-            .json({
-                "message" : "Not found, rubricid is required"
-            });
-    }
-    else {
-        res
-            .status(200)
-            .json({
-                "message" : "madf"
-            });
-    }
+const rubricUpdateOne = (req, res) => {
     Rub
         .findById(req.params.rubricid)
         .exec((err, rubric) => {
-
             const {
                 old_name,
                 old_description,
@@ -113,11 +97,12 @@ const rubricUpdateOne = (req,res) => {
                 new_description
             } = req.body;
 
-            if (rubric.name === old_name && rubric.description === old_description){
+            if (rubric.name === old_name && rubric.description === old_description) {
                 rubric.name = new_name;
                 rubric.description = new_description;
+                rubric.dateUpdated = new Date(Date.now());
                 rubric.save((err, rub) => {
-                    if(err){
+                    if (err) {
                         res
                             .status(404)
                             .json(err)
@@ -131,19 +116,19 @@ const rubricUpdateOne = (req,res) => {
                 res
                     .status(404)
                     .json({
-                        "message" : "Unable to update because record has changed since starting edit"
+                        "message": "Unable to update because record has changed since starting edit"
                     });
             }
         })
-;
+    ;
 };
-const rubricDeleteOne  = (req,res) => {
+const rubricDeleteOne = (req, res) => {
     const {rubricid} = req.params;
-    if (rubricid){
+    if (rubricid) {
         Rub
             .findByIdAndRemove(rubricid)
             .exec((err, rubric) => {
-                if (err){
+                if (err) {
                     return res
                         .status(404)
                         .json(err);
@@ -155,17 +140,16 @@ const rubricDeleteOne  = (req,res) => {
     } else {
         res.status(404)
             .json({
-                "message" : "no rubric"
+                "message": "no rubric"
             });
     }
 };
 
 
-
 const getRubricCreator = (req, res) => {
     if (req.payload && req.payload.email) {
         User
-            .findOne({ email : req.payload.email })
+            .findOne({email: req.payload.email})
             .exec((err, user) => {
                 if (!user) {
                     return res
@@ -187,7 +171,6 @@ const getRubricCreator = (req, res) => {
             .json({"message": "User not found"});
     }
 };
-
 
 
 module.exports = {

@@ -35,6 +35,10 @@ const routes: Routes = [
     component: CreateRubricComponent
   },
   {
+    path: 'edit-rubric/:rubricId',
+    component: CreateRubricComponent
+  },
+  {
     path: 'facets',
     component: FacetsComponent
   },

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {FormGroup, FormArray, FormBuilder, Validators} from '@angular/forms'
 import {Criteria, Facet, Rubric} from "../classes/rubric";
 import {RubricDataService} from "../rubric-data.service";
@@ -10,26 +10,36 @@ import {RubricDataService} from "../rubric-data.service";
   templateUrl: './facet2.component.html',
   styleUrls: ['./facet2.component.css']
 })
-export class Facet2Component implements OnInit {
+export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit {
   facetForm : FormGroup = this.fb.group({
     facets : this.fb.array([]),
   });
 
-  isEditing : boolean = false;
+  //isEditing : boolean = false;
 
   public scoreArray: number[] = [];
   @Input() rubric!: Rubric;
   @Input() topScore!: number;
   @Input() bottomScore!: number;
+  @Input() isEditing! : boolean;
 
   constructor(
     private rubricDataService: RubricDataService,
-    private fb:FormBuilder) { }
+    private fb:FormBuilder
+  ) {
+  }
 
   setUpScoreArray() {
     this.scoreArray = [];
-    for (let i = this.bottomScore; i < this.topScore + 1; i++) {
-      this.scoreArray.push(i);
+
+    if (!this.isEditing){
+      for (let i = this.bottomScore; i < this.topScore + 1; i++) {
+        this.scoreArray.push(i);
+      }
+    } else {
+      for (let criterion of this.rubric.facets[0].criteria) {
+        this.scoreArray.push(criterion.score);
+      }
     }
   }
 
@@ -40,12 +50,12 @@ export class Facet2Component implements OnInit {
 
   newFacet(): FormGroup {
     return this.fb.group({
-      facetName : ['' , [
+      _id : ['' , [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(100)
       ]],
-      facetDescription : ['' , [
+      description : ['' , [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(500)
@@ -54,8 +64,17 @@ export class Facet2Component implements OnInit {
     });
   }
 
-  addFacet() {
+  // addFacet() {
+  //    this.facetsFormArray().push(this.newFacet());
+  //   this.addAllCriteriaForFacet(this.facetsFormArray().length-1);
+  //
+  // }
+
+
+  async addFacet() {
+
     this.facetsFormArray().push(this.newFacet());
+
     this.addAllCriteriaForFacet(this.facetsFormArray().length-1);
 
   }
@@ -72,7 +91,7 @@ export class Facet2Component implements OnInit {
   // new skill
   newCriteria(score : number) : FormGroup {
     return this.fb.group({
-      criteriaID :'',
+      _id :'',
       content : ['' , [
         Validators.required,
         Validators.maxLength(250)
@@ -96,10 +115,19 @@ export class Facet2Component implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.setUpScoreArray();
-    if (!this.isEditing){
+    // if (!this.isEditing){
+    //   this.addFacet();
+    // }
+  }
+
+  ngAfterContentInit() {
+
+    for (let facet of this.rubric.facets) {
       this.addFacet();
     }
+    this.facetForm.patchValue(this.rubric);
   }
 
   async onSubmit(){
@@ -111,8 +139,8 @@ export class Facet2Component implements OnInit {
 
 
         let facetToAdd : Facet = new Facet(
-          facetArray[i].facetName,
-          facetArray[i].facetDescription,
+          facetArray[i]._id,
+          facetArray[i].description,
           new Date( Date.now()),
           new Date( Date.now()),
           true,
@@ -170,4 +198,45 @@ export class Facet2Component implements OnInit {
 
   }
 
+  ngAfterViewInit(): void {
+    for (let i = 0; i < this.facetsFormArray().length; i++) {
+      let result = this.facetForm.get('_id')?.touched;
+    }
+
+  }
+
+  async makeEditsToFacets() {
+    if (this.facetForm.status === 'VALID') {
+      let facetArray = this.facetForm.value["facets"];
+      let facetEdits : Facet[] = [];
+
+      for (let facetArrayElement of facetArray) {
+        facetEdits.push(new Facet(
+          facetArrayElement._id,
+          facetArrayElement.description,
+          new Date( Date.now()),
+          new Date( Date.now()),
+          true,
+          facetArrayElement.criteria
+        ));
+      };
+
+      for (let i = 0; i < facetEdits.length; i++) {
+        try {
+          await this.rubricDataService.updateFacet(this.rubric._id, this.rubric.facets[i] , facetEdits[i]);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+
+
+
+      // send facetEdits and this.rubric.facets off
+      // set contents of this.rubric to new facet values
+
+
+    }
+
+  }
 }

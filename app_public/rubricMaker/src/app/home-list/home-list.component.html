@@ -19,7 +19,8 @@
       <tbody>
       <tr *ngFor="let rubric of rubrics">
         <td><a routerLink="/rubric/{{rubric._id}}">{{rubric.name}}</a></td>
-        <td>{{rubric.description}}</td>
+        <td *ngIf="rubric.description.length > 40">{{rubric.description.slice(0,40)}}...</td>
+        <td *ngIf="rubric.description.length <= 40">{{rubric.description}}</td>
         <td>{{rubric.dateUpdated | date}}</td>
 <!--        <td><span class="badge bg-primary m-1" *ngFor="let subject of rubric.subjects">{{subject}}</span></td>-->
         <td>

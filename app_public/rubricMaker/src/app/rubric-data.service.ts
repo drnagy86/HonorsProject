@@ -100,11 +100,60 @@ export class RubricDataService {
         'Authorization' : `Bearer ${this.storage.getItem('rubricMaker-token')}`
       })
     };
-
     // formData.rubricCreator = this.authenticationService.getCurrentUser();
 
     return lastValueFrom(this.http.post(url, formData, httpOptions))
       .then(response => response as Rubric)
+      .catch(this.handleError)
+      ;
+  }
+
+  public updateRubric(oldRubric: Rubric, newRubricName: string, newRubricDescription: string) :Promise<Rubric> {
+    const url: string = `${this.apiBaseUrl}/rubrics/${oldRubric._id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization' : `Bearer ${this.storage.getItem('rubricMaker-token')}`
+      })
+    };
+    let body : any = {
+      old_name : oldRubric.name,
+      old_description : oldRubric.description,
+      new_name : newRubricName,
+      new_description : newRubricDescription
+    }
+
+    console.log(body);
+    // formData.rubricCreator = this.authenticationService.getCurrentUser();
+
+    return lastValueFrom(this.http.put(url, body, httpOptions))
+      .then(response => response as Rubric)
+      .catch(this.handleError)
+      ;
+  }
+  public updateFacet(rubricID : string, oldFacet: Facet, editedFacet: Facet) : Promise<Facet>  {
+    '/rubrics/:rubricid/facets/:facetid'
+
+    // let cleanedUpID : string = oldFacet._id.replace(' ', '');
+
+    const url: string = `${this.apiBaseUrl}/rubrics/${rubricID}/facets/${oldFacet._id}`;
+    console.log(url);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization' : `Bearer ${this.storage.getItem('rubricMaker-token')}`
+      })
+    };
+    let body : any = {
+      old_facet_id : oldFacet._id,
+      old_description : oldFacet.description,
+      new_name : editedFacet._id,
+      new_description : editedFacet.description
+    }
+
+    console.log(body);
+    // formData.rubricCreator = this.authenticationService.getCurrentUser();
+
+    return lastValueFrom(this.http.put(url, body, httpOptions))
+      .then(response => response as Facet)
       .catch(this.handleError)
       ;
   }
@@ -133,6 +182,5 @@ export class RubricDataService {
     private http: HttpClient,
     @Inject(BROWSER_STORAGE) private storage : Storage
     ) { }
-
 
 }

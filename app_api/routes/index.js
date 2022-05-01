@@ -23,9 +23,9 @@ router
 router
     .route('/rubrics/:rubricid')
     .get(ctrlRubrics.rubricReadOne)
-    // .put(auth, ctrlRubrics.rubricUpdateOne)
-    // .delete(auth, ctrlRubrics.rubricDeleteOne)
     .put(auth, ctrlRubrics.rubricUpdateOne)
+    // .delete(auth, ctrlRubrics.rubricDeleteOne)
+    // .put(ctrlRubrics.rubricUpdateOne)
     .delete(auth, ctrlRubrics.rubricDeleteOne)
 
 
@@ -55,7 +55,7 @@ router
 router
     .route('/rubrics/:rubricid/facets/:facetid')
     .get(ctrlFacets.facetsReadOne)
-    .put(ctrlFacets.facetsUpdateOne)
+    .put(auth, ctrlFacets.facetsUpdateOne)
     .delete(ctrlFacets.facetsDeleteOne)
 
 // criteria
