@@ -34,7 +34,14 @@
               <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#facet-'+ facetIndex">
                 Facet {{facetIndex + 1}} Details
               </button>
-              <button (click)="removeFacet(facetIndex)" class="ms-auto btn btn-danger" type="button">Remove</button>
+              <button
+                data-bs-target="#modalDeleteFacet"
+                data-bs-toggle="modal"
+                class="ms-auto btn btn-danger"
+                type="button"
+              >
+                Remove
+              </button>
             </div>
           </div>
           <div [id]="'facet-' + facetIndex"
@@ -77,23 +84,21 @@
                   <div
                     *ngIf="facet.get('description')?.dirty || facet.get('description')?.touched">
                     <div *ngIf="facet.get('description')?.errors?.['required']">
-                      <label class="text-danger">A name is required.</label>
+                      <label class="text-danger">A description is required.</label>
                     </div>
                     <div *ngIf="facet.get('description')?.errors?.['maxLength']">
-                      <label class="text-danger">A name is required.</label>
+                      <label class="text-danger">A description is required.</label>
                     </div>
                     <div *ngIf="facet.get('description')?.errors?.['minLength']">
-                      <label class="text-danger">A name is required.</label>
+                      <label class="text-danger">A description is required.</label>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div ngDefaultControl formArrayName="criteria">
-              <!--          <button (click)="addCriteria(facetIndex)" class="btn btn-primary">Add Criteria</button>-->
-              <!--          <button (click)="addAllCriteriaForFacet(facetIndex)" class="btn btn-primary">Add Criteria</button>-->
-              <div class="d-flex">
-                <div ngDefaultControl class="card m-2" *ngFor="let crit of facetCriteria(facetIndex).controls; let critIndex = index">
+              <div class="row">
+                <div ngDefaultControl class="card col-lg" *ngFor="let crit of facetCriteria(facetIndex).controls; let critIndex = index">
                   <div ngDefaultControl [formGroupName]="critIndex">
                     <div class="card-header d-flex">
                       <label
@@ -126,7 +131,7 @@
                           <div
                             *ngIf="crit.get('content')?.dirty || crit.get('content')?.touched">
                             <div *ngIf="crit.get('content')?.errors?.['required']">
-                              <label class="text-danger">A description is required.</label>
+                              <label class="text-danger">Content is required.</label>
                             </div>
                             <div *ngIf="crit.get('content')?.errors?.['maxLength']">
                               <label class="text-danger">Max 250 characters.</label>
@@ -143,113 +148,41 @@
           </div>
           </div>
         </div>
+
+<!--        start modal-->
+
+        <div class="modal fade" id="modalDeleteFacet">
+          <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Delete Facet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete this facet? You will not be able to recover it.</p>
+              </div>
+              <div class="modal-footer">
+                <div class="form-group row m-2">
+                  <div class="col-12">
+                    <button type="button" class="btn btn-primary me-2" (click)="removeFacet(facetIndex)"
+                            data-bs-dismiss="modal">Yes
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
       </div>
-
-
-<!--      <div class="accordion-item">-->
-<!--        <h2 class="accordion-header" id="headingOneAccFacets">-->
-<!--          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneFacet" aria-expanded="true" aria-controls="collapseOneFacet">-->
-<!--            Add Facets-->
-<!--          </button>-->
-<!--        </h2>-->
-<!--        <div id="collapseOneFacet" class="accordion-collapse collapse show" aria-labelledby="headingOneAccFacets" data-bs-parent="#accFacets">-->
-<!--          <div class="accordion-body">-->
-<!--            <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
     </div>
-
-
-
-
-
-
-
-<!--    <div *ngFor="let facet of facetsFormArray().controls; let facetIndex = index" class="accordion-item">-->
-<!--      <div [formGroupName]="facetIndex" class="card mt-2">-->
-<!--        <div class="card-header">-->
-<!--          <div class="d-flex">-->
-<!--            <h4 class="me-auto"> Create a Facet </h4>-->
-<!--            <button (click)="removeFacet(facetIndex)" class="ms-auto btn btn-danger" type="button">Remove</button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="card-body">-->
-<!--          <h5 class="card-title">Fill out information about the facet.</h5>-->
-<!--          <div class="card-text mb-3">-->
-<!--            Describe what will be evaluated. Student Understanding? Skill? Process?-->
-<!--          </div>-->
-<!--          <div class="form-group col-md-4">-->
-<!--            <label for="facetName-{{facetIndex}}" class="form-label">Facet Name:</label>-->
-<!--            <input type="text" class="form-control" id="facetName-{{facetIndex}}" formControlName="facetName" required>-->
-<!--            <div class="row-height-30">-->
-<!--              <div-->
-<!--                *ngIf="facet.get('facetName')?.dirty || facet.get('facetName')?.touched">-->
-<!--                <div *ngIf="facet.get('facetName')?.errors?.['required']">-->
-<!--                  <label class="text-danger">A name is required.</label>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="form-group col-md">-->
-<!--              <label class="form-label">Description:</label>-->
-<!--              <textarea class="form-control" formControlName="facetDescription" rows="2"></textarea>-->
-<!--              <div class="row-height-30">-->
-<!--                <div-->
-<!--                  *ngIf="facet.get('facetDescription')?.dirty || facet.get('facetDescription')?.touched">-->
-<!--                  <div *ngIf="facet.get('facetDescription')?.errors?.['required']">-->
-<!--                    <label class="text-danger">A name is required.</label>-->
-<!--                  </div>-->
-<!--                  <div *ngIf="facet.get('facetDescription')?.errors?.['maxLength']">-->
-<!--                    <label class="text-danger">A name is required.</label>-->
-<!--                  </div>-->
-<!--                  <div *ngIf="facet.get('facetDescription')?.errors?.['minLength']">-->
-<!--                    <label class="text-danger">A name is required.</label>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div formArrayName="criteria">-->
-<!--            &lt;!&ndash;          <button (click)="addCriteria(facetIndex)" class="btn btn-primary">Add Criteria</button>&ndash;&gt;-->
-<!--            &lt;!&ndash;          <button (click)="addAllCriteriaForFacet(facetIndex)" class="btn btn-primary">Add Criteria</button>&ndash;&gt;-->
-<!--            <div class="d-flex">-->
-<!--              <div class="card m-2" *ngFor="let crit of facetCriteria(facetIndex).controls; let critIndex = index">-->
-<!--                <div [formGroupName]="critIndex">-->
-<!--                  <div class="card-header d-flex">-->
-<!--                    <label class="me-auto form-text" [textContent]="scoreArray[critIndex]"-->
-<!--                           id="facet-crit-{{facetIndex}}-{{critIndex}}" formControlName="score"></label>-->
-<!--                    &lt;!&ndash;                  <button class="btn btn-danger" (click)="removeCriteria(facetIndex, critIndex)">X</button>&ndash;&gt;-->
-<!--                  </div>-->
-<!--                  <div class="card-text">-->
-<!--                    <input type="hidden" formControlName="criteriaID">-->
-<!--                    <div class="form-group">-->
-<!--                    <textarea-->
-<!--                      placeholder='Add description of the criteria here, e.g. "Student showed an understanding to this degree by doing..."'-->
-<!--                      formControlName="content"-->
-<!--                      rows="8"-->
-<!--                      class="form-control"-->
-<!--                    ></textarea>-->
-<!--                      <div class="row-height-30">-->
-<!--                        <div-->
-<!--                          *ngIf="crit.get('content')?.dirty || crit.get('content')?.touched">-->
-<!--                          <div *ngIf="crit.get('content')?.errors?.['required']">-->
-<!--                            <label class="text-danger">A description is required.</label>-->
-<!--                          </div>-->
-<!--                          <div *ngIf="crit.get('content')?.errors?.['maxLength']">-->
-<!--                            <label class="text-danger">Max 250 characters.</label>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
   </div>
 </form>
 

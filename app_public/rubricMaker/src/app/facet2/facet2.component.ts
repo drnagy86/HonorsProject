@@ -73,27 +73,22 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
 
   async removeFacet(facetFormArrayIndex: number) {
 
-    let facetID: string = this.rubric.facets[facetFormArrayIndex]._id;
-
     this.facetsFormArray().removeAt(facetFormArrayIndex);
 
     if (this.isEditing) {
+      let facetID: string = this.rubric.facets[facetFormArrayIndex]._id;
       try {
         await this.rubricDataService.deleteFacetByRubricID(this.rubric._id, facetID);
       } catch (e) {
         console.log(e);
       }
-
     }
-
   }
 
-  // employeeSkills
   facetCriteria(facetFormArrayIndex : number) : FormArray {
     return this.facetsFormArray().at(facetFormArrayIndex).get("criteria") as FormArray;
   }
 
-  // new skill
   newCriteria(score : number) : FormGroup {
     return this.fb.group({
       _id :'',
@@ -122,9 +117,9 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
   ngOnInit(): void {
 
     this.setUpScoreArray();
-    // if (!this.isEditing){
-    //   this.addFacet();
-    // }
+    if (!this.isEditing){
+      this.addFacet();
+    }
   }
 
   ngAfterContentInit() {
@@ -141,7 +136,6 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
 
       let facetArray =this.facetForm.value["facets"];
       for (let i = 0; i < facetArray.length; i++) {
-        //facetArray[i]
 
         let facetToAdd : Facet = new Facet(
           facetArray[i]._id,
@@ -152,22 +146,15 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
           true,
           facetArray[i].criteria
         );
-        // this.rubric.facets.push(facetToAdd);
+
 
         let returnedFacet : Facet | null;
 
         try {
           returnedFacet = await this.rubricDataService.addNewFacet(this.rubric._id, facetToAdd);
 
-          // console.log("returned facet that was added");
-          // console.log(returnedFacet);
-          //
-          // console.log("facet to Add criteria")
-          // console.log(facetToAdd.criteria);
-
           returnedFacet.criteria = facetToAdd.criteria;
-          // console.log("returned facet with criteria added");
-          // console.log(returnedFacet);
+
           try {
             let tempCriteriaList : Criteria[] = [];
 
@@ -175,18 +162,10 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
               let returnedCriteria = await this.rubricDataService
                 .addNewCriteria(this.rubric._id, returnedFacet._id, criteria);
 
-
               tempCriteriaList.push(returnedCriteria);
             }
-            // console.log("Temp criteria list before pushing to list");
-            // console.log(tempCriteriaList);
-
             returnedFacet.criteria = [];
             returnedFacet.criteria = tempCriteriaList;
-
-
-            // console.log("returned facet with returned criteria");
-            // console.log(returnedFacet);
 
           } catch (e) {
             console.log(e);
@@ -202,12 +181,7 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
     }
   }
 
-  ngAfterViewInit(): void {
-    // for (let i = 0; i < this.facetsFormArray().length; i++) {
-    //   let result = this.facetForm.get('_id')?.touched;
-    // }
-
-  }
+  ngAfterViewInit(): void {  }
 
   async makeEditsToFacets() {
     if (this.facetForm.status === 'VALID') {
@@ -233,18 +207,7 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
           await this.rubricDataService.updateFacet(this.rubric._id, this.rubric.facets[i] , facetEdits[i])
             .then( async facet => {
 
-              //console.log(facet);
-
               for (let j = 0; j < facetEdits[i].criteria.length; j++) {
-                // rubricID, facetID, oldCriterion, newCriterion
-                // console.log("RubricID");
-                // console.log(this.rubric._id);
-                // console.log("FacetID");
-                // console.log(facet._id);
-                // console.log("OldCriteria");
-                // console.log(this.rubric.facets[i].criteria[j]);
-                // console.log("NewCriteria");
-                // console.log(facetEdits[i].criteria[j]);
 
                 await this.rubricDataService.updateCriterion(this.rubric._id, facet._id, this.rubric.facets[i].criteria[j], facetEdits[i].criteria[j])
                   .then( c => facet.criteria.push(c)).catch(e => console.log(e));
