@@ -10,6 +10,7 @@ import { BROWSER_STORAGE} from "./classes/storage";
 
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -84,6 +85,16 @@ export class RubricDataService {
       .catch(this.handleError);
   }
 
+  public deleteFacetByRubricID(rubricId: string, facetId: string) : Promise<void> {
+    const url: string = `${this.apiBaseUrl}/rubrics/${rubricId}/facets/${facetId}`;
+
+    console.log("yo");
+
+    return lastValueFrom(this.http.delete(url))
+      .then(response => response as any)
+      .catch(this.handleError);
+  }
+
   public addNewCriteria(rubricId: string, facetID: string, criteria: Criteria): Promise<Criteria> {
     const url: string = `${this.apiBaseUrl}/rubrics/${rubricId}/facets/${facetID}/Criteria`;
 
@@ -122,7 +133,7 @@ export class RubricDataService {
       new_description : newRubricDescription
     }
 
-    console.log(body);
+    //console.log(body);
     // formData.rubricCreator = this.authenticationService.getCurrentUser();
 
     return lastValueFrom(this.http.put(url, body, httpOptions))
@@ -130,12 +141,53 @@ export class RubricDataService {
       .catch(this.handleError)
       ;
   }
-  public updateFacet(rubricID : string, oldFacet: Facet, editedFacet: Facet) : Promise<Facet>  {
-    '/rubrics/:rubricid/facets/:facetid'
 
+  public deactivateRubric(rubricId : string) :Promise<Rubric> {
+    const url: string = `${this.apiBaseUrl}/deactivate/${rubricId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization' : `Bearer ${this.storage.getItem('rubricMaker-token')}`
+      })
+    };
+    let body : any = { }
+
+    //console.log(body);
+    // formData.rubricCreator = this.authenticationService.getCurrentUser();
+
+    return lastValueFrom(this.http.put(url, body, httpOptions))
+      .then(response => response as Rubric)
+      .catch(this.handleError)
+      ;
+  }
+
+  public updateFacet(rubricID : string, oldFacet: Facet, editedFacet: Facet) : Promise<Facet>  {
+    // '/rubrics/:rubricid/facets/:facetid'
     // let cleanedUpID : string = oldFacet._id.replace(' ', '');
 
     const url: string = `${this.apiBaseUrl}/rubrics/${rubricID}/facets/${oldFacet._id}`;
+    //console.log(url);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization' : `Bearer ${this.storage.getItem('rubricMaker-token')}`
+      })
+    };
+    let body : any = {
+      old_name : oldFacet.name,
+      old_description : oldFacet.description,
+      new_name : editedFacet.name,
+      new_description : editedFacet.description
+    }
+
+    return lastValueFrom(this.http.put(url, body, httpOptions))
+      .then(response => response as Facet)
+      .catch(this.handleError)
+      ;
+  }
+
+  public updateCriterion(rubricID: string, facetID: string, oldCriterion: Criteria, newCriterion: Criteria) : Promise<Criteria> {
+    // '/rubrics/:rubricid/facets/:facetid/Criteria/:criteriaid'
+
+    const url: string = `${this.apiBaseUrl}/rubrics/${rubricID}/facets/${facetID}/Criteria/${oldCriterion._id}`;
     console.log(url);
     const httpOptions = {
       headers: new HttpHeaders({
@@ -143,17 +195,15 @@ export class RubricDataService {
       })
     };
     let body : any = {
-      old_facet_id : oldFacet._id,
-      old_description : oldFacet.description,
-      new_name : editedFacet._id,
-      new_description : editedFacet.description
+      old_content : oldCriterion.content,
+      new_content: newCriterion.content,
+      old_score: oldCriterion.score,
+      new_score: newCriterion.score
     }
 
-    console.log(body);
-    // formData.rubricCreator = this.authenticationService.getCurrentUser();
-
+    //console.log(body);
     return lastValueFrom(this.http.put(url, body, httpOptions))
-      .then(response => response as Facet)
+      .then(response => response as Criteria)
       .catch(this.handleError)
       ;
   }
@@ -182,5 +232,7 @@ export class RubricDataService {
     private http: HttpClient,
     @Inject(BROWSER_STORAGE) private storage : Storage
     ) { }
+
+
 
 }

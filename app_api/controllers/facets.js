@@ -132,14 +132,29 @@ const facetsUpdateOne = (req, res) => {
                         });
                 } else {
                     const {
-                        old_facet_id,
+                        // old_facet_id,
+                        // old_description,
+                        // new_facet_id,
+                        // new_description
+
+                        old_name,
                         old_description,
-                        new_facet_id,
+                        new_name,
                         new_description
+
+
                     } = req.body;
-                    if (thisFacet._id === old_facet_id && thisFacet.description === old_description){
-                        thisFacet._id = new_facet_id;
+
+                    // console.log(req.body);
+                    // console.log(thisFacet.name);
+                    // console.log(thisFacet.description);
+                    //
+                    // console.log(thisFacet.name === old_name && thisFacet.description === old_description);
+
+                    if (thisFacet.name === old_name && thisFacet.description === old_description){
+                        thisFacet.name = new_name;
                         thisFacet.description = new_description;
+                        thisFacet.dateUpdated = Date.now();
 
                         rubric.save((err, rubric) =>{
                             if(err){
@@ -190,13 +205,26 @@ const facetsDeleteOne = (req, res) => {
                     .json(err);
             }
 
-            if (rubric.facets && rubric.facets.length > 0) {
+            // console.log(rubric);
+            // console.log(rubric.facets);
+            // console.log(rubric.facets.length);
+            // console.log(rubric.facets && rubric.facets.length > 0);
+
+            if (rubric.facets.length == 1 ){
+                return res
+                    .status(404)
+                    .json({'message': 'can not delete last facet'});
+            }
+            else if (rubric.facets && rubric.facets.length > 0) {
                 if (!rubric.facets.id(facetid)) {
                     return res
                         .status(404)
                         .json({'message': 'facet not found'});
                 } else {
-                    rubric.facets.id(facetid).remove();
+
+
+                    rubric.facets.remove(rubric.facets.find(f => f.id === facetid));
+
                     rubric.save(err => {
                         if (err) {
                             return res
@@ -225,9 +253,9 @@ const doAddFacet = (req, res, rubric) => {
                 "message" : "Rubric not found"
             });
     } else {
-        const { _id, description } = req.body;
+        const { name, description } = req.body;
         rubric.facets.push({
-            _id,
+            name,
             description
         });
         rubric.save((err, rubric) => {

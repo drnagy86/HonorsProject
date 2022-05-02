@@ -2,10 +2,11 @@
   <div ngDefaultControl formArrayName="facets">
     <div class="row">
       <h3>Start Adding Facets</h3>
-      <p>Add as many facets to your rubric as you would like.</p>
+      <p>Add facets to your rubric. Describe what part of the goal is being evaluated.</p>
     </div>
     <div class="d-flex">
       <button type="button" class="btn btn-outline-dark me-auto" (click)="addFacet()">Add Facet</button>
+
       <input
         *ngIf="!isEditing; else editFacetsButton"
         [disabled]="!facetForm.valid"
@@ -23,7 +24,6 @@
           value="Save Changes"
           ngDefaultControl>
       </ng-template>
-
     </div>
 
     <div class="accordion" id="accFacets">
@@ -55,13 +55,13 @@
                 class="form-control"
                 id="facetName-{{facetIndex}}"
                 ngDefaultControl
-                formControlName="_id"
+                formControlName="name"
                 required
               >
               <div class="row-height-30">
                 <div
-                  *ngIf="facet.get('_id')?.dirty || facet.get('_id')?.touched">
-                  <div *ngIf="facet.get('_id')?.errors?.['required']">
+                  *ngIf="facet.get('name')?.dirty || facet.get('name')?.touched">
+                  <div *ngIf="facet.get('name')?.errors?.['required']">
                     <label class="text-danger">A name is required.</label>
                   </div>
                 </div>

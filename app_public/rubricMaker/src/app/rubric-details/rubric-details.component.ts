@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {Rubric, Subject, Facet, Criteria} from "../classes/rubric";
 import {RubricDataService} from "../rubric-data.service";
+import {AuthenticationService} from "../authentication.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-rubric-details',
@@ -10,49 +12,38 @@ import {RubricDataService} from "../rubric-data.service";
 export class RubricDetailsComponent implements OnInit {
   public subjectFormVisible: boolean = false;
   public addNewSubjectFormVisible: boolean = false;
-  // public showHide: any;
-  // public isChecked: boolean = true;
   public subjectFormError : string = '';
-
   public newSubject : Subject = new Subject('','');
+  public isRubricCreator : boolean = false;
 
   @Input() rubric: Rubric | any;
 
-  constructor(private rubricDataService: RubricDataService) { }
+  constructor(
+    private rubricDataService: RubricDataService,
+    private authenticationService: AuthenticationService,
+    private router : Router
+  ) { }
 
   ngOnInit(): void {
+    this.checkIfUserIsCreator();
+  }
+  private checkIfUserIsCreator(){
+    let user = this.authenticationService.getCurrentUser();
+    if (user.email === this.rubric.rubricCreator) this.isRubricCreator = true;
   }
 
-  onAddSubjectSubmit() : void {
-    this.subjectFormError = '';
-    if (this.formIsValid()){
-      //console.log(this.newSubject);
-      this.rubricDataService.addSubjectByRubricId(this.rubric._id, this.newSubject)
-        .then((subject: Subject) => {
-          //console.log('Subject saved', subject);
-          let subjects = this.rubric.subjects.slice(0);
-          subjects.unshift(subject);
-          this.rubric.subjects = subjects;
-          this.resetSubjectForm();
+  async deleteRubric() {
+    try {
+      await this.rubricDataService.deactivateRubric(this.rubric._id)
+        .then(async rubric => {
+          if (rubric.active === false) {
+            // redirect to home page
+            await this.router.navigate([`/`]);
+          }
         });
-    } else {
-      this.subjectFormError = 'The subject name field is required'
+    } catch (e) {
+      console.log(e);
     }
-  }
-
-  private formIsValid(): boolean {
-    if (this.newSubject.subject_id){
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  resetSubjectForm() : void {
-    this.newSubject.subject_id = '';
-    this.newSubject.description = '';
-    this.subjectFormError = '';
-    this.subjectFormVisible = false;
 
   }
 }

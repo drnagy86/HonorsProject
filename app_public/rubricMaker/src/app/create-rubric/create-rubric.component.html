@@ -2,30 +2,43 @@
   <div class="accordion" id="accRubric">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
           <h2 *ngIf="!isEditing; else elseBlock">Create a Rubric : Set Up</h2>
           <ng-template #elseBlock><h2>Edit {{rubric.name}}</h2></ng-template>
         </button>
       </h2>
-      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accRubric">
+      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+           data-bs-parent="#accRubric">
         <div class="accordion-body">
-          <form [formGroup]="rubricForm" >
+          <form [formGroup]="rubricForm">
             <ul class="nav nav-tabs">
               <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" href="#createRubric" [ngClass]= "{'active': activeTab === 'createRubric'}" (click)="changeTab('createRubric')">Name</a>
+                <a
+                  class="nav-link active"
+                  data-bs-toggle="tab"
+                  href="#createRubric"
+                  [ngClass]="{
+                  'active': activeTab === 'createRubric',
+                  'disabled': rubricIsCreated === true
+                  }"
+                  (click)="changeTab('createRubric')"
+                >
+                  Name
+                </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#addSubjects"
-                   [ngClass]= "{
+                   [ngClass]="{
            'active': activeTab === 'addSubjects',
            'disabled': rubricIsCreated === false
            }"
                    (click)="changeTab('addSubjects')">Subjects</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#facetScoreRange" [ngClass]= "{
+                <a class="nav-link" data-bs-toggle="tab" href="#facetScoreRange" [ngClass]="{
         'active': activeTab === 'facetScoreRange',
-        'disabled': rubricIsCreated === false || isEditing
+        'disabled': rubricIsCreated === false
 
         }" (click)="changeTab('facetScoreRange')">Score Range</a>
               </li>
@@ -34,7 +47,7 @@
             <fieldset>
 
               <div class="tab-content">
-                <div class="tab-pane fade show" id="createRubric" [ngClass]= "{'active': activeTab === 'createRubric'}">
+                <div class="tab-pane fade show" id="createRubric" [ngClass]="{'active': activeTab === 'createRubric'}">
                   <h3 class="mt-2">Name</h3>
                   <div class="form-group col-md-4">
                     <label for="name">Name:</label>
@@ -51,7 +64,8 @@
                     <label for="description">Description:</label>
                     <textarea class="form-control" id="description" formControlName="description" rows="3"></textarea>
                     <div class="row-height-30">
-                      <div *ngIf="description != null && description.invalid && (description.dirty || description.touched)">
+                      <div
+                        *ngIf="description != null && description.invalid && (description.dirty || description.touched)">
                         <div *ngIf="description.errors?.['required']">
                           <label class="text-danger">A description is required.</label>
                         </div>
@@ -80,11 +94,17 @@
                         Edit
                       </button>
                     </ng-template>
-                    <button (click)="cancelCreatingRubric()" role="button" class="btn btn-danger m-2">Cancel</button>
+                    <button
+                      role="button"
+                      class="btn btn-danger m-2"
+                      data-bs-target="#modalCancelGoHome" data-bs-toggle="modal"
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
                 <div class="tab-pane fade" id="addSubjects"
-                     [ngClass]= "{
+                     [ngClass]="{
            'active': activeTab === 'addSubjects',
            'show': activeTab === 'addSubjects'
            }">
@@ -92,7 +112,9 @@
                     <h3 class="mt-2">Subjects</h3>
                     <p>Add a subject or multiple subjects for your rubric.</p>
                     <div class="d-flex">
-                      <button type="button" class="btn btn-outline-dark m-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">+ Add Subject</button>
+                      <button type="button" class="btn btn-outline-dark m-2" data-bs-target="#addSubjectModal"
+                              data-bs-toggle="modal">+ Add Subject
+                      </button>
                       <button type="button" *ngFor="let subject of rubric.subjects"
                               class="btn btn-sm btn-dark m-2"
                               data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ subject.description}}">
@@ -106,33 +128,39 @@
                     </div>
                   </div>
                 </div>
-                <div class="tab-pane fade" id="facetScoreRange" [ngClass]= "{
+                <div class="tab-pane fade" id="facetScoreRange" [ngClass]="{
       'active': activeTab === 'facetScoreRange',
       'show': activeTab === 'facetScoreRange'
       }">
                   <div class="row">
                     <div class="row">
                       <h3 class="mt-2">Facet Score Range</h3>
-                      <p>Analytic rubrics are made of facets. Select a bottom score that represents the lowest level of achievement for a facet and a top score representing the highest.</p>
+                      <p>Analytic rubrics are made of facets. Select a bottom score that represents the lowest level of
+                        achievement for a facet and a top score representing the highest.</p>
                     </div>
                     <div class="form-group col-md-6">
                       <div class="d-flex justify-content-around">
                         <label>0</label>
-                        <label class="text-primary" for="bottomScore">Bottom score: {{ rubricForm.controls["bottomScore"].value}}</label>
+                        <label class="text-primary" for="bottomScore">Bottom
+                          score: {{ rubricForm.controls["bottomScore"].value}}</label>
                         <label>8</label>
                       </div>
-                      <input  (change)="checkScoreRange()" class="form-range" id="bottomScore" type="range" formControlName="bottomScore" min="0" max="8"/>
+                      <input (change)="checkScoreRange()" class="form-range" id="bottomScore" type="range"
+                             formControlName="bottomScore" min="0" max="8"/>
                     </div>
                     <div class="form-group col-md-6">
                       <div class="d-flex justify-content-around">
                         <label>1</label>
-                        <label class="text-primary" for="topScore">Top score: {{ rubricForm.controls["topScore"].value}}</label>
+                        <label class="text-primary" for="topScore">Top
+                          score: {{ rubricForm.controls["topScore"].value}}</label>
                         <label>9</label>
                       </div>
-                      <input class="form-range" id="topScore" type="range" formControlName="topScore" min="1" max="9" (change)="checkScoreRange()"/>
+                      <input class="form-range" id="topScore" type="range" formControlName="topScore" min="1" max="9"
+                             (change)="checkScoreRange()"/>
                       <div class="row-height-30">
-                        <div *ngIf="bottomScoreIsHigherThanTopErrorMessage != ''" >
-                          <div *ngIf="topScore != null && bottomScore != null && bottomScoreIsHigherThanTopErrorMessage != '' && (topScore.dirty || topScore.touched) && (bottomScore.dirty || bottomScore.touched)">
+                        <div *ngIf="bottomScoreIsHigherThanTopErrorMessage != ''">
+                          <div
+                            *ngIf="topScore != null && bottomScore != null && bottomScoreIsHigherThanTopErrorMessage != '' && (topScore.dirty || topScore.touched) && (bottomScore.dirty || bottomScore.touched)">
                             <label class="text-danger">{{bottomScoreIsHigherThanTopErrorMessage}}</label>
                           </div>
                         </div>
@@ -141,12 +169,40 @@
                   </div>
                   <div class="row">
                     <div class="col-3">
-                      <button class="btn btn-primary m-2" (click)="sendScoreRangeToFacets()" >Start Creating Rubric</button>
+                      <button class="btn btn-primary m-2" (click)="openFacetAccordion()">Start Creating Rubric
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </fieldset>
+
+            <div class="modal fade" id="modalCancelGoHome">
+              <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Cancel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Are you sure you want to cancel? Changes will not be saved.</p>
+                  </div>
+                  <div class="modal-footer">
+                    <div class="form-group row m-2">
+                      <div class="col-12">
+                        <button type="button" class="btn btn-primary me-2" (click)="cancelCreatingRubric()"
+                                data-bs-dismiss="modal">Yes
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="modal fade" id="addSubjectModal">
               <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
@@ -157,7 +213,7 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <fieldset  formGroupName="subjects">
+                    <fieldset formGroupName="subjects">
                       <legend>Add a Subject</legend>
                       <fieldset class="form-group">
                         <div class="form-check">
@@ -165,7 +221,7 @@
                             <input
                               type="radio" class="form-check-input"
                               name="radSubject" id="optChooseSubject" value="optChooseSubject"
-                              checked =""
+                              checked=""
                               (change)="isAddingNewSubject = false"
                             >
                             Choose a subject
@@ -182,7 +238,7 @@
                           </label>
                         </div>
                       </fieldset>
-                      <div class="form-group" *ngIf="isAddingNewSubject === false" >
+                      <div class="form-group" *ngIf="isAddingNewSubject === false">
                         <label for="selectSubject" class="form-label mt-4">Subjects</label>
                         <select class="form-select" id="selectSubject" formControlName="chooseSubjectName">
                           <option></option>
@@ -195,11 +251,13 @@
                       <div *ngIf="isAddingNewSubject === true">
                         <div class="form-group">
                           <label for="txtSubjectName" class="form-label mt-4">Subject Name</label>
-                          <input formControlName="newSubjectName" name="subject_id" type="text" class="form-control" id="txtSubjectName" placeholder="Enter Subject" required>
+                          <input formControlName="newSubjectName" name="subject_id" type="text" class="form-control"
+                                 id="txtSubjectName" placeholder="Enter Subject" required>
                         </div>
                         <div class="form-group">
                           <label for="txtAreaSubjectDescription" class="form-label mt-4">Subject Description</label>
-                          <textarea formControlName="newSubjectDescription" name="description" class="form-control" id="txtAreaSubjectDescription" rows="2"></textarea>
+                          <textarea formControlName="newSubjectDescription" name="description" class="form-control"
+                                    id="txtAreaSubjectDescription" rows="2"></textarea>
                         </div>
                       </div>
                     </fieldset>
@@ -208,8 +266,12 @@
                   <div class="modal-footer">
                     <div class="form-group row m-2">
                       <div class="col-12">
-                        <button (click)="addSubject()" type="button" class="btn btn-primary m-1" data-bs-dismiss="modal">Add Subject</button>
-                        <button (click)="resetSubjectForm()" type="button" class="btn btn-danger m-1" data-bs-dismiss="modal">Cancel</button>
+                        <button (click)="addSubject()" type="button" class="btn btn-primary m-1"
+                                data-bs-dismiss="modal">Add Subject
+                        </button>
+                        <button (click)="resetSubjectForm()" type="button" class="btn btn-danger m-1"
+                                data-bs-dismiss="modal">Cancel
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -222,258 +284,35 @@
         </div>
       </div>
     </div>
-    <div class="accordion-item">
+    <div *ngIf="isFacetTableVisible" class="accordion-item">
       <h2 class="accordion-header" id="headingTwo">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" (click)="updateRubric()">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                aria-expanded="false" aria-controls="collapseTwo" (click)="updateRubric()">
           <h2 *ngIf="!isEditing; else elseBlockForFacetAccordion">Add Facets</h2>
           <ng-template #elseBlockForFacetAccordion><h2>Edit Facets</h2></ng-template>
         </button>
       </h2>
-      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accRubric">
+      <div
+        id="collapseTwo"
+        class="accordion-collapse collapse"
+        aria-labelledby="headingTwo"
+        data-bs-parent="#accRubric"
+      >
         <div class="accordion-body">
           <div>
-          <app-facet2
-            *ngIf="isReadyForFacetsToLoad"
-            [rubric]="rubric"
-            [topScore]="topScoreNumber"
-            [bottomScore]="bottomScoreNumber"
-            [isEditing]="isEditing"
-            ngDefaultControl
-            (click)="updateRubric()"></app-facet2>
+            <app-facet2
+              *ngIf="isReadyForFacetsToLoad"
+              [rubric]="rubric"
+              [topScore]="topScoreNumber"
+              [bottomScore]="bottomScoreNumber"
+              [isEditing]="isEditing"
+              ngDefaultControl
+              (click)="updateRubric()"></app-facet2>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-<!--  <div class="row">-->
-<!--    <app-facet2 [rubric]="rubric" [topScore]="topScoreNumber" [bottomScore]="bottomScoreNumber"></app-facet2>-->
-<!--  </div>-->
-<!--  <div *ngIf="isFacetTableVisible">-->
-<!--    &lt;!&ndash;  <app-facets  [rubric]="rubric" [topScore]="topScoreNumber" [bottomScore]="bottomScoreNumber"></app-facets>&ndash;&gt;-->
-<!--    &lt;!&ndash;  <app-facet2 [rubric]="rubric" [topScore]="topScoreNumber" [bottomScore]="bottomScoreNumber"></app-facet2>&ndash;&gt;-->
-<!--    &lt;!&ndash;  <app-facets [rubric]="rubric"></app-facets>&ndash;&gt;-->
-<!--  </div>-->
-
 </div>
-
-
-
-
-
-
-<!--<div class="row mt-sm-5">-->
-<!--  <h2 *ngIf="!isEditing; else elseBlock">Create a Rubric : Set Up</h2>-->
-<!--  <ng-template #elseBlock><h2>Edit {{rubric.name}}</h2></ng-template>-->
-<!--  <form [formGroup]="rubricForm" >-->
-<!--    <ul class="nav nav-tabs">-->
-<!--      <li class="nav-item">-->
-<!--        <a class="nav-link active" data-bs-toggle="tab" href="#createRubric" [ngClass]= "{'active': activeTab === 'createRubric'}" (click)="changeTab('createRubric')">Name</a>-->
-<!--      </li>-->
-<!--      <li class="nav-item">-->
-<!--        <a class="nav-link" data-bs-toggle="tab" href="#addSubjects"-->
-<!--           [ngClass]= "{-->
-<!--           'active': activeTab === 'addSubjects',-->
-<!--           'disabled': rubricIsCreated === false-->
-<!--           }"-->
-<!--           (click)="changeTab('addSubjects')">Subjects</a>-->
-<!--      </li>-->
-<!--      <li class="nav-item">-->
-<!--        <a class="nav-link" data-bs-toggle="tab" href="#facetScoreRange" [ngClass]= "{-->
-<!--        'active': activeTab === 'facetScoreRange',-->
-<!--        'disabled': rubricIsCreated === false || isEditing-->
-
-<!--        }" (click)="changeTab('facetScoreRange')">Score Range</a>-->
-<!--      </li>-->
-<!--    </ul>-->
-
-<!--    <fieldset>-->
-
-<!--      <div class="tab-content">-->
-<!--      <div class="tab-pane fade show" id="createRubric" [ngClass]= "{'active': activeTab === 'createRubric'}">-->
-<!--        <h3 class="mt-2">Name</h3>-->
-<!--        <div class="form-group col-md-4">-->
-<!--          <label for="name">Name:</label>-->
-<!--          <input class="form-control" id="name" type="text" formControlName="name" required>-->
-<!--          <div class="row-height-30">-->
-<!--            <div *ngIf="name != null && name.invalid && (name.dirty || name.touched)">-->
-<!--              <div *ngIf="name.errors?.['required']">-->
-<!--                <label class="text-danger">A name is required.</label>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="form-group col-md-8">-->
-<!--          <label for="description">Description:</label>-->
-<!--          <textarea class="form-control" id="description" formControlName="description" rows="3"></textarea>-->
-<!--          <div class="row-height-30">-->
-<!--            <div *ngIf="description != null && description.invalid && (description.dirty || description.touched)">-->
-<!--              <div *ngIf="description.errors?.['required']">-->
-<!--                <label class="text-danger">A description is required.</label>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--          <button-->
-<!--            *ngIf="!isEditing; else editButton"-->
-<!--            type="submit"-->
-<!--            [disabled]="!rubricForm.valid"-->
-<!--            role="button"-->
-<!--            class="btn btn-primary m-2"-->
-<!--            (click)="onRubricSubmit()"-->
-<!--          >-->
-<!--            Create-->
-<!--          </button>-->
-<!--          <ng-template #editButton>-->
-<!--            <button-->
-<!--              type="submit"-->
-<!--              [disabled]="!rubricForm.valid"-->
-<!--              role="button"-->
-<!--              class="btn btn-primary m-2"-->
-<!--              (click)="onRubricEdit()"-->
-<!--            >-->
-<!--              Edit-->
-<!--            </button>-->
-<!--          </ng-template>-->
-<!--          <button (click)="cancelCreatingRubric()" role="button" class="btn btn-danger m-2">Cancel</button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="tab-pane fade" id="addSubjects"-->
-<!--           [ngClass]= "{-->
-<!--           'active': activeTab === 'addSubjects',-->
-<!--           'show': activeTab === 'addSubjects'-->
-<!--           }">-->
-<!--        <div class="form-group">-->
-<!--          <h3 class="mt-2">Subjects</h3>-->
-<!--          <p>Add a subject or multiple subjects for your rubric.</p>-->
-<!--          <div class="d-flex">-->
-<!--            <button type="button" class="btn btn-outline-dark m-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">+ Add Subject</button>-->
-<!--            <button type="button" *ngFor="let subject of rubric.subjects"-->
-<!--                    class="btn btn-sm btn-dark m-2"-->
-<!--                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ subject.description}}">-->
-<!--              {{subject.subject_id}}-->
-<!--            </button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--          <div class="col-3">-->
-<!--            <button class="btn btn-primary m-2" (click)="readyToAddSubjects()">Choose Score Range</button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="tab-pane fade" id="facetScoreRange" [ngClass]= "{-->
-<!--      'active': activeTab === 'facetScoreRange',-->
-<!--      'show': activeTab === 'facetScoreRange'-->
-<!--      }">-->
-<!--        <div class="row">-->
-<!--          <div class="row">-->
-<!--            <h3 class="mt-2">Facet Score Range</h3>-->
-<!--            <p>Analytic rubrics are made of facets. Select a bottom score that represents the lowest level of achievement for a facet and a top score representing the highest.</p>-->
-<!--          </div>-->
-<!--          <div class="form-group col-md-6">-->
-<!--            <div class="d-flex justify-content-around">-->
-<!--              <label>0</label>-->
-<!--              <label class="text-primary" for="bottomScore">Bottom score: {{ rubricForm.controls["bottomScore"].value}}</label>-->
-<!--              <label>8</label>-->
-<!--            </div>-->
-<!--            <input  (change)="checkScoreRange()" class="form-range" id="bottomScore" type="range" formControlName="bottomScore" min="0" max="8"/>-->
-<!--          </div>-->
-<!--          <div class="form-group col-md-6">-->
-<!--            <div class="d-flex justify-content-around">-->
-<!--              <label>1</label>-->
-<!--              <label class="text-primary" for="topScore">Top score: {{ rubricForm.controls["topScore"].value}}</label>-->
-<!--              <label>9</label>-->
-<!--            </div>-->
-<!--            <input class="form-range" id="topScore" type="range" formControlName="topScore" min="1" max="9" (change)="checkScoreRange()"/>-->
-<!--            <div class="row-height-30">-->
-<!--              <div *ngIf="bottomScoreIsHigherThanTopErrorMessage != ''" >-->
-<!--                <div *ngIf="topScore != null && bottomScore != null && bottomScoreIsHigherThanTopErrorMessage != '' && (topScore.dirty || topScore.touched) && (bottomScore.dirty || bottomScore.touched)">-->
-<!--                  <label class="text-danger">{{bottomScoreIsHigherThanTopErrorMessage}}</label>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--          <div class="col-3">-->
-<!--            <button class="btn btn-primary m-2" (click)="sendScoreRangeToFacets()" >Start Creating Rubric</button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      </div>-->
-<!--    </fieldset>-->
-<!--    <div class="modal fade" id="addSubjectModal">-->
-<!--      <div class="modal-dialog modal-dialog-scrollable" role="document">-->
-<!--        <div class="modal-content">-->
-<!--          <div class="modal-header">-->
-<!--            <h5 class="modal-title">Add Subjects</h5>-->
-<!--            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">-->
-<!--              <span aria-hidden="true"></span>-->
-<!--            </button>-->
-<!--          </div>-->
-<!--          <div class="modal-body">-->
-<!--            <fieldset  formGroupName="subjects">-->
-<!--              <legend>Add a Subject</legend>-->
-<!--              <fieldset class="form-group">-->
-<!--                <div class="form-check">-->
-<!--                  <label class="form-check-label">-->
-<!--                    <input-->
-<!--                      type="radio" class="form-check-input"-->
-<!--                      name="radSubject" id="optChooseSubject" value="optChooseSubject"-->
-<!--                      checked =""-->
-<!--                      (change)="isAddingNewSubject = false"-->
-<!--                    >-->
-<!--                    Choose a subject-->
-<!--                  </label>-->
-<!--                </div>-->
-<!--                <div class="form-check">-->
-<!--                  <label class="form-check-label">-->
-<!--                    <input-->
-<!--                      type="radio" class="form-check-input"-->
-<!--                      name="radSubject" id="optNewSubject" value="optNewSubject"-->
-<!--                      (change)="isAddingNewSubject = true"-->
-<!--                    >-->
-<!--                    Create a new subject-->
-<!--                  </label>-->
-<!--                </div>-->
-<!--              </fieldset>-->
-<!--              <div class="form-group" *ngIf="isAddingNewSubject === false" >-->
-<!--                <label for="selectSubject" class="form-label mt-4">Subjects</label>-->
-<!--                <select class="form-select" id="selectSubject" formControlName="chooseSubjectName">-->
-<!--                  <option></option>-->
-<!--                  <option *ngFor="let subject of subjects">{{subject.subject_id}}</option>-->
-<!--                </select>-->
-<!--              </div>-->
-<!--              <div *ngIf="subjectFormError" class="alert alert-danger" role="alert">-->
-<!--                {{ subjectFormError}}-->
-<!--              </div>-->
-<!--              <div *ngIf="isAddingNewSubject === true">-->
-<!--                <div class="form-group">-->
-<!--                  <label for="txtSubjectName" class="form-label mt-4">Subject Name</label>-->
-<!--                  <input formControlName="newSubjectName" name="subject_id" type="text" class="form-control" id="txtSubjectName" placeholder="Enter Subject" required>-->
-<!--                </div>-->
-<!--                <div class="form-group">-->
-<!--                  <label for="txtAreaSubjectDescription" class="form-label mt-4">Subject Description</label>-->
-<!--                  <textarea formControlName="newSubjectDescription" name="description" class="form-control" id="txtAreaSubjectDescription" rows="2"></textarea>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </fieldset>-->
-
-<!--          </div>-->
-<!--          <div class="modal-footer">-->
-<!--            <div class="form-group row m-2">-->
-<!--              <div class="col-12">-->
-<!--                <button (click)="addSubject()" type="button" class="btn btn-primary m-1" data-bs-dismiss="modal">Add Subject</button>-->
-<!--                <button (click)="resetSubjectForm()" type="button" class="btn btn-danger m-1" data-bs-dismiss="modal">Cancel</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--  </form>-->
-<!--</div>-->
 
 

@@ -7,7 +7,6 @@ const User = mongoose.model('User');
 //     The findById() method returns an error.
 
 const rubricsList = (req, res) => {
-
     Rub
         .find()
         .exec((err, rubrics) => {
@@ -24,9 +23,10 @@ const rubricsList = (req, res) => {
             }
             res
                 .status(200)
-                .json(rubrics);
+                .json(rubrics.filter(isActive));
         })
 };
+
 const rubricCreate = (req, res) => {
 
     //res = getRubricCreator(req, res);
@@ -122,6 +122,41 @@ const rubricUpdateOne = (req, res) => {
         })
     ;
 };
+
+const rubricDeactivate = (req, res) =>{
+    // return res
+    // .status(200)
+    // .json({
+    //     "message": "worked"
+    // });
+    const {rubricid} = req.params;
+    if (rubricid){
+        // see if it is in the db
+        Rub
+            .findById(rubricid)
+            .exec((err, rubric) =>{
+                rubric.active = false;
+                rubric.save((err, rub) => {
+                    if (err) {
+                        res
+                            .status(404)
+                            .json(err)
+                    } else {
+                        res
+                            .status(200)
+                            .json(rub);
+                    }
+                });
+        });
+
+    } else {
+        res.status(404)
+            .json({
+                "message": "no rubric"
+            });
+    }
+}
+
 const rubricDeleteOne = (req, res) => {
     const {rubricid} = req.params;
     if (rubricid) {
@@ -144,7 +179,6 @@ const rubricDeleteOne = (req, res) => {
             });
     }
 };
-
 
 const getRubricCreator = (req, res) => {
     if (req.payload && req.payload.email) {
@@ -172,11 +206,15 @@ const getRubricCreator = (req, res) => {
     }
 };
 
+const isActive = (rubric) => {
+    return rubric.active === true;
+};
 
 module.exports = {
     rubricsList,
     rubricCreate,
     rubricReadOne,
     rubricUpdateOne,
-    rubricDeleteOne
+    rubricDeleteOne,
+    rubricDeactivate
 }

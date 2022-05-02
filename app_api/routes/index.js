@@ -26,7 +26,12 @@ router
     .put(auth, ctrlRubrics.rubricUpdateOne)
     // .delete(auth, ctrlRubrics.rubricDeleteOne)
     // .put(ctrlRubrics.rubricUpdateOne)
-    .delete(auth, ctrlRubrics.rubricDeleteOne)
+    .delete(auth, ctrlRubrics.rubricDeleteOne);
+
+router
+    .route('/deactivate/:rubricid')
+    .put(auth, ctrlRubrics.rubricDeactivate)
+
 
 
 // subjects
@@ -56,7 +61,7 @@ router
     .route('/rubrics/:rubricid/facets/:facetid')
     .get(ctrlFacets.facetsReadOne)
     .put(auth, ctrlFacets.facetsUpdateOne)
-    .delete(ctrlFacets.facetsDeleteOne)
+    .delete(auth, ctrlFacets.facetsDeleteOne)
 
 // criteria
 router

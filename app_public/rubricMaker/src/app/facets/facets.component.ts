@@ -69,7 +69,7 @@ export class FacetsComponent implements OnInit {
     for (let i = this.bottomScore; i < this.topScore + 1; i++) {
       blankCriteriaList.push(new Criteria('test', i + " Test", i, new Date(Date.now()), new Date(Date.now()), true))
     }
-    let blankFacet: Facet = new Facet('test', '', new Date(Date.now()), new Date(Date.now()), true, blankCriteriaList);
+    let blankFacet: Facet = new Facet('test', '','', new Date(Date.now()), new Date(Date.now()), true, blankCriteriaList);
     this.rubric.facets.push(blankFacet);
 
     // for (let i = this.bottomScore; i < this.topScore; i++) {

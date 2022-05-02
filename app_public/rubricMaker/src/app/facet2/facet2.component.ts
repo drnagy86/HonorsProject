@@ -2,6 +2,7 @@ import {AfterContentInit, AfterViewInit, Component, EventEmitter, Input, OnInit}
 import {FormGroup, FormArray, FormBuilder, Validators} from '@angular/forms'
 import {Criteria, Facet, Rubric} from "../classes/rubric";
 import {RubricDataService} from "../rubric-data.service";
+import {Router} from "@angular/router";
 
 
 
@@ -15,8 +16,6 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
     facets : this.fb.array([]),
   });
 
-  //isEditing : boolean = false;
-
   public scoreArray: number[] = [];
   @Input() rubric!: Rubric;
   @Input() topScore!: number;
@@ -25,7 +24,8 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
 
   constructor(
     private rubricDataService: RubricDataService,
-    private fb:FormBuilder
+    private fb:FormBuilder,
+    private router : Router
   ) {
   }
 
@@ -37,20 +37,21 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
         this.scoreArray.push(i);
       }
     } else {
+      console.log('test');
       for (let criterion of this.rubric.facets[0].criteria) {
         this.scoreArray.push(criterion.score);
       }
     }
   }
 
-  //employees()
   facetsFormArray():FormArray{
     return this.facetForm.get("facets") as FormArray;
   }
 
   newFacet(): FormGroup {
     return this.fb.group({
-      _id : ['' , [
+      _id : ['' , [ ]],
+      name : ['' , [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(100)
@@ -64,23 +65,27 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
     });
   }
 
-  // addFacet() {
-  //    this.facetsFormArray().push(this.newFacet());
-  //   this.addAllCriteriaForFacet(this.facetsFormArray().length-1);
-  //
-  // }
-
-
   async addFacet() {
-
     this.facetsFormArray().push(this.newFacet());
-
     this.addAllCriteriaForFacet(this.facetsFormArray().length-1);
 
   }
 
-  removeFacet(facetFormArrayIndex : number){
+  async removeFacet(facetFormArrayIndex: number) {
+
+    let facetID: string = this.rubric.facets[facetFormArrayIndex]._id;
+
     this.facetsFormArray().removeAt(facetFormArrayIndex);
+
+    if (this.isEditing) {
+      try {
+        await this.rubricDataService.deleteFacetByRubricID(this.rubric._id, facetID);
+      } catch (e) {
+        console.log(e);
+      }
+
+    }
+
   }
 
   // employeeSkills
@@ -131,15 +136,16 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
   }
 
   async onSubmit(){
+
     if (this.facetForm.status === 'VALID'){
 
       let facetArray =this.facetForm.value["facets"];
       for (let i = 0; i < facetArray.length; i++) {
         //facetArray[i]
 
-
         let facetToAdd : Facet = new Facet(
           facetArray[i]._id,
+          facetArray[i].name,
           facetArray[i].description,
           new Date( Date.now()),
           new Date( Date.now()),
@@ -153,15 +159,15 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
         try {
           returnedFacet = await this.rubricDataService.addNewFacet(this.rubric._id, facetToAdd);
 
-          console.log("returned facet that was added");
-          console.log(returnedFacet);
-
-          console.log("facet to Add criteria")
-          console.log(facetToAdd.criteria);
+          // console.log("returned facet that was added");
+          // console.log(returnedFacet);
+          //
+          // console.log("facet to Add criteria")
+          // console.log(facetToAdd.criteria);
 
           returnedFacet.criteria = facetToAdd.criteria;
-          console.log("returned facet with criteria added");
-          console.log(returnedFacet);
+          // console.log("returned facet with criteria added");
+          // console.log(returnedFacet);
           try {
             let tempCriteriaList : Criteria[] = [];
 
@@ -172,36 +178,34 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
 
               tempCriteriaList.push(returnedCriteria);
             }
-            console.log("Temp criteria list before pushing to list");
-            console.log(tempCriteriaList);
+            // console.log("Temp criteria list before pushing to list");
+            // console.log(tempCriteriaList);
 
             returnedFacet.criteria = [];
             returnedFacet.criteria = tempCriteriaList;
 
 
-            console.log("returned facet with returned criteria");
-            console.log(returnedFacet);
+            // console.log("returned facet with returned criteria");
+            // console.log(returnedFacet);
 
           } catch (e) {
             console.log(e);
           }
           this.rubric.facets.push(facetToAdd);
+          // redirect to details page
+          await this.router.navigate([`/rubric/${this.rubric._id}`]);
 
         } catch (e) {
           console.log(e);
         }
       }
     }
-
-    console.log("Final rubric");
-    console.log(this.rubric);
-
   }
 
   ngAfterViewInit(): void {
-    for (let i = 0; i < this.facetsFormArray().length; i++) {
-      let result = this.facetForm.get('_id')?.touched;
-    }
+    // for (let i = 0; i < this.facetsFormArray().length; i++) {
+    //   let result = this.facetForm.get('_id')?.touched;
+    // }
 
   }
 
@@ -213,6 +217,7 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
       for (let facetArrayElement of facetArray) {
         facetEdits.push(new Facet(
           facetArrayElement._id,
+          facetArrayElement.name,
           facetArrayElement.description,
           new Date( Date.now()),
           new Date( Date.now()),
@@ -221,20 +226,40 @@ export class Facet2Component implements OnInit, AfterContentInit, AfterViewInit 
         ));
       };
 
+      let tempFacetArray : Facet[] = [];
+
       for (let i = 0; i < facetEdits.length; i++) {
         try {
-          await this.rubricDataService.updateFacet(this.rubric._id, this.rubric.facets[i] , facetEdits[i]);
+          await this.rubricDataService.updateFacet(this.rubric._id, this.rubric.facets[i] , facetEdits[i])
+            .then( async facet => {
+
+              //console.log(facet);
+
+              for (let j = 0; j < facetEdits[i].criteria.length; j++) {
+                // rubricID, facetID, oldCriterion, newCriterion
+                // console.log("RubricID");
+                // console.log(this.rubric._id);
+                // console.log("FacetID");
+                // console.log(facet._id);
+                // console.log("OldCriteria");
+                // console.log(this.rubric.facets[i].criteria[j]);
+                // console.log("NewCriteria");
+                // console.log(facetEdits[i].criteria[j]);
+
+                await this.rubricDataService.updateCriterion(this.rubric._id, facet._id, this.rubric.facets[i].criteria[j], facetEdits[i].criteria[j])
+                  .then( c => facet.criteria.push(c)).catch(e => console.log(e));
+              }
+
+              tempFacetArray.push(facet);
+            });
         } catch (e) {
           console.log(e);
         }
       }
+      this.rubric.facets = tempFacetArray;
 
-
-
-
-      // send facetEdits and this.rubric.facets off
-      // set contents of this.rubric to new facet values
-
+      // redirect to details page
+      await this.router.navigate([`/rubric/${this.rubric._id}`]);
 
     }
 

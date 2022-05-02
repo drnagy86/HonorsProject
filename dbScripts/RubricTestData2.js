@@ -3,16 +3,16 @@ db = connect( "mongodb://localhost/rubricDB")
  
 // db.dropDatabase()
 
-db.users.insertOne(
-	{
-		_id : ObjectId("62337982dd76768c63cb9474"),
-		email : 'derrick@company.com',
-		givenName : 'Derrick',
-		familyName : 'Nagy',
-		salt : 'b847ed51bd76f617ccefa3cad03072d6',
-		hash : '8847edc1b1b9b1cff9d6fc417588a3f6fac497b3bbb7584b6f137d1591a10f5221037ea4d585896e9b57c22ebb09cba2368a73e78f99a355194bee1c4e9605b9'
-	}
-)
+// db.users.insertOne(
+// 	{
+// 		_id : ObjectId("62337982dd76768c63cb9474"),
+// 		email : 'derrick@company.com',
+// 		givenName : 'Derrick',
+// 		familyName : 'Nagy',
+// 		salt : 'b847ed51bd76f617ccefa3cad03072d6',
+// 		hash : '8847edc1b1b9b1cff9d6fc417588a3f6fac497b3bbb7584b6f137d1591a10f5221037ea4d585896e9b57c22ebb09cba2368a73e78f99a355194bee1c4e9605b9'
+// 	}
+// )
 
 db.rubrics.insertOne(
 	{
@@ -33,7 +33,8 @@ db.rubrics.insertOne(
 		],
 		facets : [
 			{
-				_id : 'Perspective',
+				_id : ObjectId("626eba698de867957b332b2b"),
+				name : 'Perspective',
 				description : 'See things from a different point of view, underlying assumptions, take a stance',
 				criteria : [
 					{
@@ -59,7 +60,8 @@ db.rubrics.insertOne(
 				]
 			},
 			{
-				_id : 'Empathy',
+				_id : ObjectId("626eba698de867957b332b2c"),
+				name : 'Empathy',
 				description : 'Help students understand diversity of thought, feel for others',
 				criteria : [
 					{
@@ -85,7 +87,8 @@ db.rubrics.insertOne(
 				]
 			},
 			{
-				_id : 'Reveal self knowledge',
+				_id : ObjectId("626eba698de867957b332b2d"),
+				name : 'Reveal self knowledge',
 				description : 'Self-assess past and present work',
 				criteria : [
 					{
@@ -111,7 +114,8 @@ db.rubrics.insertOne(
 				]
 			},
 			{
-				_id : 'Explanation',
+				_id : ObjectId("626eba698de867957b332b2e"),
+				name : 'Explanation',
 				description : 'The big idea in their own words, show work, explain reasoning, make a theory',
 				criteria : [
 					{
@@ -159,15 +163,18 @@ db.rubrics.insertOne(
 		],
 		facets : [
 			{
-				_id : 'Accuracy',
+				_id : ObjectId("626eba698de867957b332b2f"),
+				name : 'Accuracy',
 				description : 'Grammatical correctness appropriate for level'
 			},
 			{
-				_id : 'Speaking',
+				_id : ObjectId("626eba698de867957b332b30"),
+				name : 'Speaking',
 				description : 'Fluent and correct pronunciation'
 			},
 			{
-				_id : 'Vocabulary',
+				_id : ObjectId("626eba698de867957b332b31"),
+				name : 'Vocabulary',
 				description : 'Lexical resource variety and correctness'
 			}
 		]

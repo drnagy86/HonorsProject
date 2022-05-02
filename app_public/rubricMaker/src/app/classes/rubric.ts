@@ -20,6 +20,7 @@ export class Criteria {
 export class Facet {
   constructor(
     _id: string,
+    name: string,
     description: string,
     dateCreated: Date,
     dateUpdate: Date,
@@ -27,6 +28,7 @@ export class Facet {
     criteria: Criteria[]) {
 
     this._id = _id;
+    this.name = name;
     this.description = description;
     this.dateCreated = dateCreated;
     this.dateUpdate = dateUpdate;
@@ -34,6 +36,7 @@ export class Facet {
     this.criteria = criteria;
   }
   _id : string;
+  name : string;
   description: string;
   dateCreated: Date;
   dateUpdate: Date;

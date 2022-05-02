@@ -11,7 +11,7 @@
     <tbody>
       <tr *ngFor="let facet of rubric.facets">
         <th>
-          {{ facet._id }}
+          {{ facet.name }}
         </th>
         <td *ngFor="let criteria of facet.criteria">
             {{ criteria.content }}

@@ -28,9 +28,9 @@ const subjectsSchema = new mongoose.Schema({
 });
 
 const criteriaSchema = new mongoose.Schema({
-    _id : {
-        type : mongoose.Schema.Types.ObjectId,
-    },
+    // _id : {
+    //     type : mongoose.Schema.Types.ObjectId,
+    // },
     content : {
         type : String,
         required : true,
@@ -77,7 +77,10 @@ const criteriaSchema = new mongoose.Schema({
 // });
 
 const facetsSchema = new mongoose.Schema({
-    _id : {
+    // _id : {
+    //     type : mongoose.Schema.Types.ObjectId
+    // },
+    name : {
         type : String,
         required : true,
         unique : true,

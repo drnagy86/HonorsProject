@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RubricDataService} from "../rubric-data.service";
 import {Rubric, Facet, Criteria} from "../classes/rubric";
 
 @Component({
@@ -13,13 +12,11 @@ export class RubricFacetsComponent implements OnInit {
 
   public scoreRange : number[] = [];
 
-  constructor(private rubricDataService: RubricDataService) { }
-
+  constructor() { }
 
   ngOnInit(): void {
     this.scoreRange = this.findScoreRange(this.rubric);
   }
-
   private findScoreRange(rubricScore : Rubric): number[] {
     const result : number[] = [];
 
@@ -27,11 +24,7 @@ export class RubricFacetsComponent implements OnInit {
     for (let criterion of facetOne.criteria) {
       result.push(criterion.score)
     }
-
     return result;
 }
-
-  // data service
-  // send to html
 
 }
