@@ -6,3 +6,8 @@ body {
 .nav-link.active {
    font-weight: 600 !important;
 }
+
+
+table {
+  width: 100%;
+}

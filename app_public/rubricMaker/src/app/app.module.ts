@@ -23,6 +23,8 @@ import { RubricFacetsComponent } from './rubric-facets/rubric-facets.component';
 import { CreateRubricComponent } from './create-rubric/create-rubric.component';
 import { FacetsComponent } from './facets/facets.component';
 import { Facet2Component } from './facet2/facet2.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatTableModule} from "@angular/material/table";
 
 
 
@@ -50,7 +52,9 @@ import { Facet2Component } from './facet2/facet2.component';
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatTableModule
   ],
   providers: [{provide: APP_BASE_HREF, useValue:'/'}],
   bootstrap: [FrameworkComponent]

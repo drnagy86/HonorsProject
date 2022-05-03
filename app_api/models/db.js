@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
-const dbURI = 'mongodb://localhost/rubricDB';
+let dbURI = 'mongodb://localhost/rubricDB';
+//let dbURI = 'mongodb://mongo:27017/rubricDB';
+// let dbURI = 'mongodb://database/mean-app';
 
 require ('./rubrics');
 require ('./users');
 
 // to remind about setting up for production
 // if (process.env.NODE_ENV === 'production') {
-//     dbURI = 'whereEver this is';
+//     dbURI = 'mongodb://mongo:27017/rubricDB';
 // }
 const options = {
     useNewUrlParser: true,
@@ -24,8 +26,6 @@ const options = {
 
 mongoose.connect(dbURI, {
     useNewUrlParser: true
-
-
 });
 mongoose.connection.on('connected', () => {
     console.log(`Mongoose connected to ${dbURI}`);
