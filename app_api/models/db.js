@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 let dbURI = 'mongodb://localhost/rubricDB';
+let dbURI = 'process.env.MONGODB_URI';
+
 //let dbURI = 'mongodb://mongo:27017/rubricDB';
 // let dbURI = 'mongodb://database/mean-app';
 
