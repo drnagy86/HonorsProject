@@ -1,9 +1,12 @@
+
+
 {
   "name": "meanrubric",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env DEBUG=MEANRubric:* nodemon ./bin/www",
+    "start": "./bin/www",
+    "realStart": "cross-env DEBUG=MEANRubric:* nodemon ./bin/www",
     "test": "mocha"
   },
   "dependencies": {
