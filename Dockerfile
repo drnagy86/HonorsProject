@@ -1,14 +1,29 @@
 FROM node:16
 
 
-
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY package.json /usr/src/app
+#RUN mkdir -p /HonorsProject /HonorsProject/app_api /HonorsProject /HonorsProject/app_public /HonorsProject/public /HonorsProject/bin
+WORKDIR /HonorsProject
+COPY . /HonorsProject
+#COPY app_api/ /HonorsProject/
+#COPY app_public/ /HonorsProject/
+#COPY bin/ /HonorsProject/
+#COPY *.js .env package.json /HonorsProject/
 RUN npm install
-COPY . /usr/src/app
+
 EXPOSE 3000
 CMD ["node","./app.js"]
+
+
+
+#FROM node:16
+#
+#RUN mkdir -p /usr/src/app
+#WORKDIR /usr/src/app
+#COPY package.json /usr/src/app
+#RUN npm install
+#COPY . /usr/src/app
+#EXPOSE 3000
+#CMD ["node","./app.js"]
 
 #FROM node:16
 #

@@ -41,11 +41,16 @@ export class RegisterComponent implements OnInit {
       !this.credentials.familyName ||
       !this.credentials.email ||
       !this.credentials.password
-      //|| !this.credentials.retypePassword
+      || !this.credentials.retypePassword
     ) {
       this.formErrors = 'All fields required. Please fill them out.'
     } else {
-      this.doRegister();
+
+      if (this.credentials.password !== this.credentials.retypePassword){
+        this.formErrors = 'Passwords must match, please try again';
+      }else {
+        this.doRegister();
+      }
     }
   }
 
