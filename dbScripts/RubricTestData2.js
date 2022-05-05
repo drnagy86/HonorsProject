@@ -155,6 +155,11 @@ db.rubrics.insertOne(
 			{
 				subject_id : "ESL",
 				description : "English as a Second Language",
+				criteria : [
+					{
+
+					}
+				]
 			},
 			{
 				subject_id : 'Speaking',
@@ -165,17 +170,70 @@ db.rubrics.insertOne(
 			{
 				_id : ObjectId("626eba698de867957b332b2f"),
 				name : 'Accuracy',
-				description : 'Grammatical correctness appropriate for level'
+				description : 'Grammatical correctness appropriate for level',
+				criteria: [
+					{
+						_id: ObjectId("6239fc3405a0581f567ed78a"),
+						content: 'Student shows above average grammatical correctness for their level. Very few mistakes, easy to understand. Natural',
+						score: 3
+					},
+					{
+						_id: ObjectId("6239fc3405a0581f567ed78b"),
+						content: 'Student shows average grammatical correctness for their level. Some mistakes but generally able to understand.',
+						score: 2
+					},
+					{
+						_id: ObjectId("6239fc3405a0581f567ed78c"),
+						content: 'Student shows below average grammatical correctness for their level. Errors lead to issues with communication.',
+						score: 1
+					}
+				]
 			},
 			{
 				_id : ObjectId("626eba698de867957b332b30"),
 				name : 'Speaking',
-				description : 'Fluent and correct pronunciation'
+				description : 'Fluent and correct pronunciation',
+				criteria:
+					[
+						{
+							_id: ObjectId("6239fc3405a0581f567ed78d"),
+							content: 'Student shows above average fluency for their level. Very few mistakes, easy to understand. Natural',
+							score: 3
+						},
+						{
+							_id: ObjectId("6239fc3405a0581f567ed78e"),
+							content: 'Student shows average fluency for their level. Some mistakes but generally able to understand.',
+							score: 2
+						},
+						{
+							_id: ObjectId("6239fc3405a0581f567ed78f"),
+							content: 'Student shows below average fluency for their level. Errors lead to issues with communication.',
+							score: 1
+						}
+					]
 			},
 			{
 				_id : ObjectId("626eba698de867957b332b31"),
 				name : 'Vocabulary',
-				description : 'Lexical resource variety and correctness'
+				description : 'Lexical resource variety and correctness',
+				criteria:
+					[
+						{
+							_id: ObjectId("6239fc3405a0581f567ed79a"),
+							content: 'Student shows above average lexical resource for their level. Lots of variety. Natural',
+							score: 3
+						},
+						{
+							_id: ObjectId("6239fc3405a0581f567ed79b"),
+							content: 'Student shows average lexical resource for their level. Some mistakes but generally able to be understood.',
+							score: 2
+						},
+						{
+							_id: ObjectId("6239fc3405a0581f567ed79c"),
+							content: 'Student shows below average lexical resource for their level. Errors lead to issues with communication.',
+							score: 1
+						}
+					]
 			}
 		]
 	}

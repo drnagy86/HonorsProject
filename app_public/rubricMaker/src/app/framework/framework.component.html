@@ -76,7 +76,10 @@ c-48 24 -160 46 -325 63 -133 14 -689 21 -840 10z"/>
         </ul>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link text-light" routerLink="login" *ngIf="!isLoggedIn()">Sign In</a>
+            <a *ngIf="!isLoggedIn()" class="nav-link text-light" routerLink="/register" routerLinkActive="active" >Register</a>
+          </li>
+          <li class="nav-item">
+            <a  *ngIf="!isLoggedIn()" class="nav-link text-light" routerLink="login" routerLinkActive="active">Sign In</a>
           </li>
           <span *ngIf="isLoggedIn()" class="navbar-text text-light">
                       {{getUsername()}}

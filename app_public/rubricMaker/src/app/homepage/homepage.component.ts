@@ -15,7 +15,7 @@ export class HomepageComponent implements OnInit {
   public pageContent = {
     header : {
       title : 'Rubric Maker',
-      strapline : 'Create analytic rubrics'
+      strapline : 'View the analytic rubrics on the site. Sign in or sign up to create your own.'
     },
     sidebar : 'Create analytic rubrics for your courses.'
 };
