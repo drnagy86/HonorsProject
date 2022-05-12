@@ -1,8 +1,17 @@
 const mongoose = require('mongoose');
-let dbURI = 'mongodb://localhost/rubricDB';
-// let dbURI = 'mongodb://127.0.0.1:27017/rubricDB';
-// let dbURI = 'process.env.MONGODB_URI';
-//let dbURI = 'mongodb://mongo:27017/rubricDB';
+
+// original
+let url = 'mongodb://localhost/rubricDB';
+
+
+
+
+// doesn't crash, can access express, but still no db
+//let url = `mongodb://root:123456@$localhost:27017/rubricDB?authSource=admin`;
+
+
+
+
 
 require ('./rubrics');
 require ('./users');
@@ -25,35 +34,39 @@ const options = {
     useUnifiedTopology: true
 }
 
-mongoose.connect(dbURI, {
+mongoose.connect(url, {
     useNewUrlParser: true
 });
-mongoose.connection.on('connected', () => {
-    console.log(`Mongoose connected to ${dbURI}`);
-});
-mongoose.connection.on('error', err => {
-    console.log(`Mongoose connection error: ${err}`);
-});
-mongoose.connection.on('disconnected', () => {
-    console.log('Mongoose disconnected');
-});
-const gracefulShutdown = (msg, callback) => {
-    mongoose.connection.close( () => {
-        console.log(`Mongoose disconnected through ${msg}`);
-        callback();
-    });
-};
-// For nodemon restarts
-process.once('SIGUSR2', () => {
-    gracefulShutdown('nodemon restart', () => {
-        process.kill(process.pid, 'SIGUSR2');
-    });
-});
-// For app termination
-process.on('SIGINT', () => {
-    gracefulShutdown('app termination', () => {
-        process.exit(0);
-    });
-});
+// mongoose.connection.on('connected', () => {
+//     console.log(`Mongoose connected to ${url}`);
+// });
+// mongoose.connection.on('error', err => {
+//     console.log(`Mongoose connection error: ${err}`);
+// });
+// mongoose.connection.on('disconnected', () => {
+//     console.log('Mongoose disconnected');
+// });
+// const gracefulShutdown = (msg, callback) => {
+//     mongoose.connection.close( () => {
+//         console.log(`Mongoose disconnected through ${msg}`);
+//         callback();
+//     });
+// };
+// // For nodemon restarts
+// process.once('SIGUSR2', () => {
+//     gracefulShutdown('nodemon restart', () => {
+//         process.kill(process.pid, 'SIGUSR2');
+//     });
+// });
+// // For app termination
+// process.on('SIGINT', () => {
+//     gracefulShutdown('app termination', () => {
+//         process.exit(0);
+//     });
+// });
 
 require('./rubrics');
+
+module.exports = {
+    url
+};

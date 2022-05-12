@@ -1,19 +1,38 @@
+# guide from
+#https://www.bezkoder.com/docker-compose-nodejs-mongodb/
+
 FROM node:16
 
-
-#RUN mkdir -p /HonorsProject /HonorsProject/app_api /HonorsProject /HonorsProject/app_public /HonorsProject/public /HonorsProject/bin
 WORKDIR /HonorsProject
-COPY . /HonorsProject
-#COPY app_api/ /HonorsProject/
-#COPY app_public/ /HonorsProject/
-#COPY bin/ /HonorsProject/
-#COPY *.js .env package.json /HonorsProject/
+COPY package.json .
+RUN npm install
+COPY . .
 RUN npm install
 
-EXPOSE 3000
+#EXPOSE 3000
+#EXPOSE 27017
+
 CMD ["node","./app.js"]
 
+#What they suggested
+#CMD npm start
 
+
+
+#
+##RUN mkdir -p /HonorsProject /HonorsProject/app_api /HonorsProject /HonorsProject/app_public /HonorsProject/public /HonorsProject/bin
+#WORKDIR /HonorsProject
+#COPY . /HonorsProject
+##COPY app_api/ /HonorsProject/
+##COPY app_public/ /HonorsProject/
+##COPY bin/ /HonorsProject/
+##COPY *.js .env package.json /HonorsProject/
+#RUN npm install
+#
+#EXPOSE 3000
+#CMD ["node","./app.js"]
+#
+#
 
 #FROM node:16
 #

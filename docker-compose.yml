@@ -1,37 +1,102 @@
-version: '3' # specify docker-compose version
+#version: '3.8' # specify docker-compose version
 
-# Define the services/ containers to be run
+# https://www.bezkoder.com/docker-compose-nodejs-mongodb/
+
+version: "3.8"
 services:
-#    angular:
-#      build: /app_public/rubricMaker
+  mongodb:
+    image: mongo:5.0.2
+#    restart: unless-stopped
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=root
+#      - MONGO_INITDB_ROOT_PASSWORD=123456
+
+  app:
+    depends_on:
+      - mongodb
+    build: ../HonorsProject
+    ports:
+      - "3000:3000"
+#    environment:
+#      - DB_HOST=mongodb
+#      - DB_USER=root
+#      - DB_PASSWORD=123456
+#      - DB_NAME=rubricDB
+#      - DB_PORT=27017
+    stdin_open: true
+    tty: true
+volumes:
+  db:
+
+
+
+
+#
+#services:
+#  mongodb:
+#    image: mongo:5.0.2
+#    restart: unless-stopped
+#    env_file: ./.env
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER
+#      - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
+#    ports:
+#      - "27017:27017"
+#    volumes:
+#      - db:/data/db
+#  app:
+#    depends_on:
+#      - mongodb
+#    build: ../HonorsProject
+#    restart: unless-stopped
+#    env_file: ./.env
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - DB_HOST=mongodb
+#      - DB_USER=$MONGODB_USER
+#      - DB_PASSWORD=$MONGODB_PASSWORD
+#      - DB_NAME=$MONGODB_DATABASE
+#      - DB_PORT=$MONGODB_DOCKER_PORT
+#    stdin_open: true
+#    tty: true
+#volumes:
+#  db:
+
+
+
+## Define the services/ containers to be run
+#services:
+##    angular:
+##      build: /app_public/rubricMaker
+##      ports:
+##        - "4200:4200" # specify port mapping
+##      networks:
+##        - rubnet
+###      restart: always
+#
+#    express:
+#      build: ../HonorsProject
 #      ports:
-#        - "4200:4200" # specify port mapping
+#        - "3000:3000" #specify ports mapping
+#      restart: always
 #      networks:
 #        - rubnet
-##      restart: always
-
-    express:
-      build: ../HonorsProject
-      ports:
-        - "3000:3000" #specify ports mapping
-      restart: always
-      networks:
-        - rubnet
-      depends_on:
-        - mongo
-
-    mongo:
-      image: mongo:4
-#      environment:
-#        MONGO_INITDB_ROOT_USERNAME: root
-#        MONGO_INITDB_ROOT_PASSWORD: example
-      ports:
-        - "27017:27017" # specify port forwarding
-      networks:
-        - rubnet
-
-networks:
-  rubnet:
-    driver: bridge
-
-
+#      depends_on:
+#        - mongo
+#
+#    mongo:
+#      image: mongo:4
+##      environment:
+##        MONGO_INITDB_ROOT_USERNAME: root
+##        MONGO_INITDB_ROOT_PASSWORD: example
+#      ports:
+#        - "27017:27017" # specify port forwarding
+#      networks:
+#        - rubnet
+#
+#networks:
+#  rubnet:
+#    driver: bridge
+#
+#
