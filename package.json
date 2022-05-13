@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env DEBUG=MEANRubric:* nodemon ./bin/www",
+    "deploy": "node ./bin/www",
     "test": "mocha"
   },
   "dependencies": {
