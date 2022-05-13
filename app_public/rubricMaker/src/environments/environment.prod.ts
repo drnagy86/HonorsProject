@@ -1,4 +1,4 @@
 export const environment = {
-  apiBaseUrl: "http://localhost:3000/api",
+  apiBaseUrl: "https://cryptic-fjord-93984.herokuapp.com/api/",
   production: true
 };
