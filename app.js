@@ -32,11 +32,10 @@ app.use(cookieParser());
 
 
 
-//https://www.bezkoder.com/docker-compose-nodejs-mongodb/
-// const PORT = 8080;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}.`);
-// });
+const PORT = 3000 || process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
 
 
 app.use(express.static(path.join(__dirname, 'public')));
